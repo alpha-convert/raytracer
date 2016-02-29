@@ -23,6 +23,8 @@ public:
 	static const Color Black;
 	static const Color White;
 
+	bool operator==(const Color& c) const;
+
 };
 
 

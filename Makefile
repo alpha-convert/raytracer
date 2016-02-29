@@ -1,4 +1,4 @@
-CXX=g++
+CXX=clang++
 CC=gcc
 AS=as
 
