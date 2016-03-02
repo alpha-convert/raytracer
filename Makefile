@@ -4,13 +4,15 @@ AS=as
 
 EXEC=$(notdir $(CURDIR))
 
-LIBS=-I./src -I/Library/Frameworks/SDL2.framework/Headers
+INCLUDES=-I./src -I./src/math
 
-CXXFLAGS:=-Wall -Wextra -O2 -march=native -ftrapv -Wundef -fverbose-asm $(LIBS) -std=c++11 -Wno-sign-compare
+LIBS=-framework SDL2 -framework OpenGL -framework OpenGL 
+
+CXXFLAGS:=-Wall -Wextra -O2 -march=native -ftrapv -Wundef -fverbose-asm $(INCLUDES) -std=c++11 -Wno-sign-compare
 CFLAGS:=-Wall -Wextra -O2 -ftrapv -Wundef -fverbose-asm
 ASFLAGS:=
 
-LD_FLAGS:=-framework SDL2
+LD_FLAGS:=$(LIBS)
 
 CPP_FILES := $(shell find src -name '*.cpp')
 C_FILES := $(shell find src -name '*.c')
