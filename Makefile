@@ -6,7 +6,7 @@ EXEC=$(notdir $(CURDIR))
 
 INCLUDES=-I./src -I./src/math
 
-LIBS=-framework SDL2 -framework OpenGL -framework OpenGL 
+LIBS=-framework SDL2 -framework OpenGL -framework GLUT /usr/local/lib/libGLEW.dylib
 
 CXXFLAGS:=-Wall -Wextra -O2 -march=native -ftrapv -Wundef -fverbose-asm $(INCLUDES) -std=c++11 -Wno-sign-compare
 CFLAGS:=-Wall -Wextra -O2 -ftrapv -Wundef -fverbose-asm
