@@ -10,8 +10,9 @@
 
 #include <vector>
 
-#include "Vec3/Vec3.h"
-#include "../Color/Color.h"
+#include "Math/Vec3/Vec3.h"
+#include "Color/Color.h"
+#include "Vertex/Vertex.h"
 
 struct SDL_Window;
 struct SDL_Surface;
@@ -19,15 +20,18 @@ struct SDL_Renderer;
 struct SDL_Texture;
 class Color;
 
+typedef struct ScreenPoint{int x, y;} ScreenPoint;
+
 class Graphics {
 public:
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 
+	uint32_t width;
+	uint32_t height;
 
-
-	unsigned int width;
-	unsigned int height;
+	float vertical_angle;
+	float horizontal_angle;
 
 	Graphics(uint32_t width, uint32_t height, const char *);
 	void Update();
@@ -41,15 +45,22 @@ public:
 	inline void PutPixel(int32_t x, int32_t y, const Color &c);
 	inline void SetColor(const Color &c);
 
-	void Polygon(const std::vector<const Vertex>& poly, const Color& c, const Quat& q = NULL);
-	
+	void Triangle(const Vec3* tri, const Color& c);
+	void Triangle(const Vec3* tri, const Color& c, const Color &fill);
+
+	void Polygon(const std::vector<Vertex>& poly, const Color& c);
+	void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation);
 
 	virtual ~Graphics();
 
 private:
 
-uint32_t GetRawPixelFromSurface(uint32_t x, uint32_t y, const SDL_Surface* const surface);
-Color SDLColorToColor(uint32_t n);
+	uint32_t GetRawPixelFromSurface(uint32_t x, uint32_t y, const SDL_Surface* const surface);
+	Color SDLColorToColor(uint32_t n);
+
+
+	ScreenPoint Vec3ToScreenPoint(const Vec3& v);
+	Vec3		ScreenPointToVec3(const ScreenPoint &p);
 
 };
 
