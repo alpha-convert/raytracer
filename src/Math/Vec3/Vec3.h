@@ -10,6 +10,11 @@ class Vec2;
 class Quat;
 #endif
 
+#ifndef VEC4_H_
+class Vec4;
+#endif
+
+
 class Vec3{
 public:
 	float x,y,z;
@@ -31,6 +36,7 @@ public:
 
 	operator Quat() const;
 	operator Vec2() const;
+	operator Vec4() const;
 
 	Vec3 normalized() const;
 	void normalizeInPlace();

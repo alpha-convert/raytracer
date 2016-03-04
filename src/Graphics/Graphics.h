@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "Math/Vec3/Vec3.h"
+#include "Math/Vec4/Vec4.h"
 #include "Color/Color.h"
 #include "Vertex/Vertex.h"
 
@@ -45,8 +46,9 @@ public:
 	inline void PutPixel(int32_t x, int32_t y, const Color &c);
 	inline void SetColor(const Color &c);
 
+	void Triangle(const Vec4* tri, const Color& c);
 	void Triangle(const Vec3* tri, const Color& c);
-	void Triangle(const Vec3* tri, const Color& c, const Color &fill);
+	void Triangle(const Vec4* tri, const Color& c, const Color &fill);
 
 	void Polygon(const std::vector<Vertex>& poly, const Color& c);
 	void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation);

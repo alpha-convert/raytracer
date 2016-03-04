@@ -1,6 +1,7 @@
 #include "Vec3.h"
 #include "Quat/Quat.h"
 #include "Vec2/Vec2.h"
+#include "Vec4/Vec4.h"
 #include <cmath>
 #include <cassert>
 
@@ -44,6 +45,10 @@ Vec3::operator Quat() const{
 Vec3::operator Vec2() const{
 	assert(z == 0);
 	return Vec2(x,y);
+}
+
+Vec3::operator Vec4() const{
+	return Vec4(x,y,z,1);
 }
 
 Vec3 Vec3::normalized() const{

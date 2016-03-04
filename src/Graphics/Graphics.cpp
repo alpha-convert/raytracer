@@ -68,6 +68,7 @@ void Graphics::Update() {
 }
 
 //TODO: fix to acutally work with real transformations
+//http://www.tomdalling.com/blog/modern-opengl/explaining-homogenous-coordinates-and-projective-geometry/
 void Graphics::ProjectVec3(const Vec3 &v, const Color &c, int scalar) {
 	this->SpaceLine(0, 0, v.dot(Vec3::I) * scalar, v.dot(Vec3::J) * scalar, c);
 }
@@ -122,21 +123,23 @@ Color Graphics::SDLColorToColor(uint32_t n){
 }
 
 Vec3 GetBarycentric(const Vec3 &t0, const Vec3 &t1, const Vec3 &t2, const Vec3 &p){
+	(void) t0;
+	(void) t1;
+	(void) t2;
+	(void) p;
 	Vec3 as_bary;
 	return as_bary;
 }
 
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
-void Graphics::Triangle(const Vec3* tri, const Color& c, const Color &fill){
-	Triangle(tri,c,c);
-}
-
-
-void Graphics::Triangle(const Vec3* tri, const Color& c){
-	//sort the three in order
+void Graphics::Triangle(const Vec4* tri, const Color& c, const Color &fill){
+	(void) fill;
 	auto t0 = tri[0];
 	auto t1 = tri[1];
 	auto t2 = tri[2];
+
+	//sort the three in order
+
 	if (t0.y>t1.y) std::swap(t0, t1); 
 	if (t0.y>t2.y) std::swap(t0, t2); 
 	if (t1.y>t2.y) std::swap(t1, t2); 
@@ -146,8 +149,20 @@ void Graphics::Triangle(const Vec3* tri, const Color& c){
 	LineFromVec(t1,t2,c);
 	LineFromVec(t2,t0,c);
 
-
 	//get bounding box for rasterizing
+}
+
+
+void Graphics::Triangle(const Vec3* tri, const Color& c){
+	Vec4 v4tri[3];
+	v4tri[0] = (Vec4) tri[0];
+	v4tri[1] = (Vec4) tri[1];
+	v4tri[2] = (Vec4) tri[2];
+	Triangle(v4tri,c,c);
+}
+
+void Graphics::Triangle(const Vec4* tri, const Color& c){
+	Triangle(tri,c,c);
 }
 
 
