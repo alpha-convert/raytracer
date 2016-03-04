@@ -15,6 +15,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include <array>
+
 //General graphics flow:
 
 Graphics::Graphics(uint32_t width, uint32_t height, const char *name) {
@@ -69,28 +71,28 @@ void Graphics::Update() {
 
 //TODO: fix to acutally work with real transformations
 //http://www.tomdalling.com/blog/modern-opengl/explaining-homogenous-coordinates-and-projective-geometry/
-void Graphics::ProjectVec3(const Vec3 &v, const Color &c, int scalar) {
+void Graphics::ProjectVec3(const Vec3 &v, const Color &c, int scalar) const{
 	this->SpaceLine(0, 0, v.dot(Vec3::I) * scalar, v.dot(Vec3::J) * scalar, c);
 }
 
-void Graphics::LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) {
+void Graphics::LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const {
 	this->SpaceLine(v1.x, v1.y, v2.x, v2.y, c);
 }
 
 
-inline void Graphics::SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2,const Color &c) {
+inline void Graphics::SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2,const Color &c) const {
 	Line(this->width / 2 + x1, this->height / 2 - y1, this->width / 2 + x2,
 			this->height / 2 - y2, c);
 }
 
-void Graphics::Line(int32_t x1, int y1, int x2, int y2, const Color &c) {
+void Graphics::Line(int32_t x1, int y1, int x2, int y2, const Color &c) const {
 	SetColor(c);
 	SDL_RenderDrawLine(this->renderer, x1, y1, x2, y2);
 }
 
 
 
-inline void Graphics::PutPixel(int x, int y, const Color &c) {
+inline void Graphics::PutPixel(int x, int y, const Color &c) const {
 	if (!(x > this->width && x < 0 && y > this->height && y < 0)) {
 		SetColor(c);
 		SDL_RenderDrawPoint(this->renderer, x, y);
@@ -109,12 +111,12 @@ Graphics::~Graphics() {
 	SDL_Quit();
 }
 
-void Graphics::SetColor(const Color &c){
+void Graphics::SetColor(const Color &c) const {
 	SDL_SetRenderDrawColor(this->renderer, c.r, c.g, c.b, 255);
 
 }
 
-Color Graphics::SDLColorToColor(uint32_t n){
+Color Graphics::SDLColorToColor(uint32_t n) const{
 	Color c =Color(0,0,0);
 	c.r = n & 0xff000000;
 	c.g = n & 0xff0000;
@@ -132,11 +134,20 @@ Vec3 GetBarycentric(const Vec3 &t0, const Vec3 &t1, const Vec3 &t2, const Vec3 &
 }
 
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
-void Graphics::Triangle(const Vec4* tri, const Color& c, const Color &fill){
+void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const{
+	
+	std::array<Vec4,3> corrected = tri;
 	(void) fill;
-	auto t0 = tri[0];
-	auto t1 = tri[1];
-	auto t2 = tri[2];
+	Mat4 proj = Mat4::Projection();
+
+	for(auto& v : corrected){
+		auto scale = v.z;
+		v = (proj * v) / scale;
+	}
+
+	auto t0 = corrected[0];
+	auto t1 = corrected[1];
+	auto t2 = corrected[2];
 
 	//sort the three in order
 
@@ -152,21 +163,12 @@ void Graphics::Triangle(const Vec4* tri, const Color& c, const Color &fill){
 	//get bounding box for rasterizing
 }
 
-
-void Graphics::Triangle(const Vec3* tri, const Color& c){
-	Vec4 v4tri[3];
-	v4tri[0] = (Vec4) tri[0];
-	v4tri[1] = (Vec4) tri[1];
-	v4tri[2] = (Vec4) tri[2];
-	Triangle(v4tri,c,c);
-}
-
-void Graphics::Triangle(const Vec4* tri, const Color& c){
+void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c) const{
 	Triangle(tri,c,c);
 }
 
 
-void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c){
+void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) const{
 	for(const auto& vertex : poly){
 		for(const auto vert_ref : vertex.adj){
 			this->LineFromVec(vertex.pos,poly[vert_ref].pos,c);
@@ -175,7 +177,7 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c){
 }
 
 
-void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation){
+void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const{
 	for(const auto& vertex : poly){
 		for(const auto vert_ref : vertex.adj){
 			this->LineFromVec(vertex.pos.rotate(rotation),poly[vert_ref].pos.rotate(rotation),c);

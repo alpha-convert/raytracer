@@ -1,5 +1,4 @@
 #include <cmath>
-#include <array>
 #include <cstdio>
 #include <vector>
 #include "Math/Vec2/Vec2.h"
@@ -23,39 +22,46 @@ int main(int argc, char** argv){
 	(void) argc;
 	(void) argv;
 
-	auto t0 = Vec4(-100,-50,1);
-	auto t1 = Vec4(100,-50,5);
-	auto t2 = Vec4(0,100,1);
+	auto t0 = Vec4(-100,-50,20);
+	auto t1 = Vec4(100,-50,20);
+	auto t2 = Vec4(0,100,20);
 
-	auto a0 = Vec4(-100,-50,2);
-	auto a1 = Vec4(100,-50,2);
-	auto a2 = Vec4(0,100,2);
+	auto a0 = Vec4(200,-50,100);
+	auto a1 = Vec4(400,-50,100);
+	auto a2 = Vec4(300,100,100);
 
-	std::array<Vec4,3> triangle = {{t0,t1,t2}};
-	std::array<Vec4,3> triangle2 = {{a0,a1,a2}};
-	
+	Vec4 triangle[3] = {t0,t1,t2};
+	Vec4 corrected[3] = {a0,a1,a2};
+
+	for(int i = 0; i < 3; ++i){
+		Mat4 projection = Mat4::Ident();
+		projection[15] = 0;
+		auto zval = corrected[i].z;
+		projection[14] = zval;
+
+		corrected[i] = ((projection * corrected[i]));
+		auto v = corrected[i];
+		printf("Uncorrected: %f,%f,%f,%f\n");
+
+	}
+
 	Graphics g = Graphics(1920/2,1080/2,"Window");
 
-	float i = 0;
-	Quat q;
 
 	SDL_Event e;
 	bool running = true;
 	while(running){
-		if(SDL_PollEvent(&e)){
+		while(SDL_PollEvent(&e)){
 			if(e.type == SDL_QUIT || e.window.event == SDL_WINDOWEVENT_CLOSE){
 				running = false;
 				break;
 			}
+			g.Clear();
+//			g.Polygon(pyramid,Color::Red);
+			g.Triangle(triangle,Color::Red);
+			g.Triangle(corrected,Color::Red);
+			g.Update();
 		}
-		++i;
-		
-
-		g.Clear();
-//		g.Polygon(pyramid,Color::Red);
-		g.Triangle(triangle,Color::Red);
-		g.Triangle(triangle2,Color::Red);
-		g.Update();
 	
 	}
 

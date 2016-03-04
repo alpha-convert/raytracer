@@ -23,6 +23,7 @@ public:
     float& operator[](unsigned index);
     float operator[](unsigned index) const;
 	static Mat4 Ident();
+	static Mat4 Projection();
 
 	Mat4 operator*(float f) const;
 	Mat4 operator*(const Mat4& m) const;

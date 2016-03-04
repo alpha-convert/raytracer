@@ -14,6 +14,14 @@ Mat4 Mat4::Ident(){
 	return m;
 }
 
+
+Mat4 Mat4::Projection(){
+	Mat4 m = Mat4::Ident();
+	m[15] = 0;
+	m[14] = 1;
+	return m;
+}
+
 float& Mat4::operator[](unsigned index){
 	if(index >= 16){
 		std::out_of_range e("Mat4 access out of range");
