@@ -27,7 +27,7 @@ Graphics::Graphics(uint32_t width, uint32_t height, const char *name) {
 	this->height = height;
 
 	this->window = SDL_CreateWindow(name,
-	SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height,
+			SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height,
 			SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 	if (!this->window) {
 		fprintf(stderr, "Error creating window, %s\n", SDL_GetError());
@@ -105,7 +105,7 @@ inline void Graphics::PutPixel(int x, int y, const Color &c) const {
 
 Graphics::~Graphics() {
 	// TODO Auto-generated destructor stub
-//	SDL_FreeSurface(surface);
+	//	SDL_FreeSurface(surface);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(this->renderer);
 	SDL_Quit();
@@ -135,7 +135,7 @@ Vec3 GetBarycentric(const Vec3 &t0, const Vec3 &t1, const Vec3 &t2, const Vec3 &
 
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
 void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const{
-	
+
 	std::array<Vec4,3> corrected = tri;
 	(void) fill;
 	Mat4 proj = Mat4::Projection();
@@ -154,7 +154,7 @@ void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Col
 	if (t0.y>t1.y) std::swap(t0, t1); 
 	if (t0.y>t2.y) std::swap(t0, t2); 
 	if (t1.y>t2.y) std::swap(t1, t2); 
-	
+
 	//draw lines
 	LineFromVec(t0,t1,c);
 	LineFromVec(t1,t2,c);
@@ -169,6 +169,14 @@ void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c) const{
 
 
 void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) const{
+	std::vector<Vertex> corrected = poly;
+	Mat4 proj = Mat4::Projection();
+
+	for(auto& v : corrected){
+		auto scale = v.pos.z;
+		v.pos = (proj * v.pos) / scale;
+	}
+
 	for(const auto& vertex : poly){
 		for(const auto vert_ref : vertex.adj){
 			this->LineFromVec(vertex.pos,poly[vert_ref].pos,c);
@@ -178,6 +186,14 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) const{
 
 
 void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const{
+	std::vector<Vertex> corrected = poly;
+	Mat4 proj = Mat4::Projection();
+
+	for(auto& v : corrected){
+		auto scale = v.pos.z;
+		v.pos = (proj * v.pos) / scale;
+	}
+
 	for(const auto& vertex : poly){
 		for(const auto vert_ref : vertex.adj){
 			this->LineFromVec(vertex.pos.rotate(rotation),poly[vert_ref].pos.rotate(rotation),c);

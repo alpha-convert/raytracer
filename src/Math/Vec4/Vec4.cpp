@@ -33,4 +33,11 @@ Vec4::operator Vec3() const{
 	return v;
 }
 
+Vec4 Vec4::rotate(const Quat& q) const{
+	
+	auto as_vec3 = Vec3(x,y,z);
+	auto rotated = as_vec3.rotate(q);
+	
 
+	return Vec4(rotated.x,rotated.y,rotated.z);
+}

@@ -25,44 +25,44 @@ class Color;
 typedef struct ScreenPoint{int x, y;} ScreenPoint;
 
 class Graphics {
-public:
-	SDL_Window *window;
-	SDL_Renderer *renderer;
+	public:
+		SDL_Window *window;
+		SDL_Renderer *renderer;
 
-	uint32_t width;
-	uint32_t height;
+		uint32_t width;
+		uint32_t height;
 
-	float vertical_angle;
-	float horizontal_angle;
+		float vertical_angle;
+		float horizontal_angle;
 
-	Graphics(uint32_t width, uint32_t height, const char *);
-	void Update();
-	void Clear();
+		Graphics(uint32_t width, uint32_t height, const char *);
+		void Update();
+		void Clear();
 
-	inline void SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
-	void ProjectVec3(const Vec3 &v, const Color &c, int32_t scalar = 1) const;
-	void LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const;
+		inline void SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
+		void ProjectVec3(const Vec3 &v, const Color &c, int32_t scalar = 1) const;
+		void LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const;
 
-	void Line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
-	inline void PutPixel(int32_t x, int32_t y, const Color &c) const;
-	inline void SetColor(const Color &c) const;
+		void Line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
+		inline void PutPixel(int32_t x, int32_t y, const Color &c) const;
+		inline void SetColor(const Color &c) const;
 
-	void Triangle(const std::array<Vec4,3>& tri, const Color& c) const;
-	void Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const;
+		void Triangle(const std::array<Vec4,3>& tri, const Color& c) const;
+		void Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const;
 
-	void Polygon(const std::vector<Vertex>& poly, const Color& c) const;
-	void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const;
+		void Polygon(const std::vector<Vertex>& poly, const Color& c) const;
+		void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const;
 
-	virtual ~Graphics();
+		virtual ~Graphics();
 
-private:
+	private:
 
-	uint32_t GetRawPixelFromSurface(uint32_t x, uint32_t y, const SDL_Surface* const surface);
-	Color SDLColorToColor(uint32_t n) const;
+		uint32_t GetRawPixelFromSurface(uint32_t x, uint32_t y, const SDL_Surface* const surface);
+		Color SDLColorToColor(uint32_t n) const;
 
 
-	ScreenPoint Vec3ToScreenPoint(const Vec3& v);
-	Vec3		ScreenPointToVec3(const ScreenPoint &p);
+		ScreenPoint Vec3ToScreenPoint(const Vec3& v);
+		Vec3		ScreenPointToVec3(const ScreenPoint &p);
 
 };
 
