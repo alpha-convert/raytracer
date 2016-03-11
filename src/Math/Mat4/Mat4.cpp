@@ -6,6 +6,7 @@ Mat4::Mat4() : data(16){
 	data[0] = data[5] = data[10] = data[15] = 1.0f;
 }
 
+Mat4::Mat4(std::vector<float> data) : data(data){};
 
 Mat4 Mat4::Ident(){
 	Mat4 m;
@@ -14,6 +15,27 @@ Mat4 Mat4::Ident(){
 	return m;
 }
 
+Mat4 Mat4::Translation(float x, float y, float z){
+	Mat4 m = Mat4::Ident();
+	m.data[3] = x;
+	m.data[7] = y;
+	m.data[11] = z;
+	return m;
+}
+
+
+Mat4 Mat4::Translation(const Vec3& v){
+	return Mat4::Translation(v.x,v.y,v.z);
+}
+Mat4 Mat4::Translation(const Vec4& v){
+	return Mat4::Translation(v.x,v.y,v.z);
+}
+
+Mat4 Mat4::Scale(float f){
+	Mat4 m = Mat4::Ident();
+	m.data[0] = m.data[5] = m.data[10] = f;
+	return m;
+}
 
 Mat4 Mat4::Projection(){
 	Mat4 m = Mat4::Ident();
@@ -76,7 +98,6 @@ Mat4 Mat4::operator*(const Mat4& b) const{
 	c[14] = a[12]*b[2] + a[13]*b[6] + a[14]*b[10] + a[15]*b[14];
 	c[15] = a[12]*b[3] + a[13]*b[7] + a[14]*b[11] + a[15]*b[15];
 	return c;
-
 }
 
 void Mat4::print(){

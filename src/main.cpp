@@ -23,16 +23,16 @@ int main(int argc, char** argv){
 	(void) argc;
 	(void) argv;
 	
-	auto tbl = Vertex(Vec4(-100,100,100),		{1,3,4});
-	auto tbr = Vertex(Vec4(100,100,100),		{0,2,5});
-	auto tfr = Vertex(Vec4(100,100,-100),		{1,3,6});
-	auto tfl = Vertex(Vec4(-100,100,-100),		{0,2,7});
+	auto tbl = Vertex(Vec4(-1,1,1),		{1,3,4});
+	auto tbr = Vertex(Vec4(1,1,1),		{0,2,5});
+	auto tfr = Vertex(Vec4(1,1,-1),		{1,3,6});
+	auto tfl = Vertex(Vec4(-1,1,-1),		{0,2,7});
 
 
-	auto bbl = Vertex(Vec4(-100,-100,100),	{0,7,5});
-	auto bbr = Vertex(Vec4(100,-100,100),		{1,4,6});
-	auto bfr = Vertex(Vec4(100,-100,-100),		{2,5,7});
-	auto bfl = Vertex(Vec4(-100,-100,-100),	{3,4,6});
+	auto bbl = Vertex(Vec4(-1,-1,1),	{0,7,5});
+	auto bbr = Vertex(Vec4(1,-1,1),		{1,4,6});
+	auto bfr = Vertex(Vec4(1,-1,-1),		{2,5,7});
+	auto bfl = Vertex(Vec4(-1,-1,-1),	{3,4,6});
 
 	std::vector<Vertex> cube;
 	cube.push_back(tbl);
@@ -45,7 +45,7 @@ int main(int argc, char** argv){
 	cube.push_back(bfr);
 	cube.push_back(bfl);
 
-	ObjFile diamond("diamond.obj");
+	//ObjFile diamond("diamond.obj");
 
 	auto t0 = Vec4(-100,-50,1);
 	auto t1 = Vec4(100,-50,5);
@@ -63,39 +63,40 @@ int main(int argc, char** argv){
 
 	Graphics g = Graphics(1920/2,1080/2,"Window");
 
-	float i = 0;
+	float i = 0.05;
 	Quat q;
 
 	SDL_Event e;
-//	bool running = true;
-//	TODO: MAKE THIS TRUE TO RUN
+
+	auto initial_rot = Quat::rotation((Vec3::J + Vec3::K).normalized(),DEG(90));
+	auto initial_trans = Mat4::Translation(0,0,100);
+	auto initial_scale = Mat4::Scale(100);
+	for(auto& v : cube){
+		v.pos = initial_trans * initial_scale * v.pos.rotate(initial_rot);
+	}
+
 	bool running =  true;
+
 	while(running){
 		if(SDL_PollEvent(&e)){
 			if(e.type == SDL_QUIT || e.window.event == SDL_WINDOWEVENT_CLOSE){
 				running = false;
-				break;
 			}
 		}
-		i += 0.05;
-
-		Quat q = Quat::rotation(Vec3(sqrt(2)/2,0,-sqrt(2)/2),DEG(i));
 
 		g.Clear();
-
-		for(const auto& vert : diamond.faces){
-//			Vertex v;
-//			g.Pol
+		auto rotation_axis = (Vec3::J).normalized();
+		q = Quat::rotation(rotation_axis,DEG(i));
+		for(auto& v : cube){
+			v.pos = v.pos.rotate(q);
 		}
-		//g.Polygon(cube,Color::Red,q);
-		//		g.Triangle(triangle,Color::Red);
-		//		g.Triangle(triangle2,Color::Red);
+		g.Polygon(cube,Color::Green);
+
 		g.Update();
 
 	}
 
 	SDL_Quit();
 }
-
 
 

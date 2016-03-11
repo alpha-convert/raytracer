@@ -25,7 +25,6 @@ Vec4 Vec4::operator/(float f) const{
 }
 
 Vec4::operator Vec3() const{
-	assert(w == 1);
 	Vec3 v;
 	v.x = x;
 	v.y = y;

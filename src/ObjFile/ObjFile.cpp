@@ -33,68 +33,78 @@ ObjFile::ObjFile(const std::string& fname){
 	auto lines = split(raw,"\n");
 
 	//parse each line into its type
-	for(auto& line : lines){
+	for(const auto& line : lines){
 		if(boost::starts_with(line,"v")){
 			verts.push_back(ParseVertex(line));
 
 		} else if(boost::starts_with(line,"vn")){
-			normals.push_back((Vec3) ParseVertex(line)); //same format as vertexes.
+			normals.push_back(ParseNormal(line)); //same format as vertexes.
 
+		} else if(boost::starts_with(line,"vt")){
+			textures.push_back(ParseTexture(line));
+			
 		} else if(boost::starts_with(line,"f")){
-			face_refs.push_back(ParseFaceRef(line));
+			faces.push_back(ParseFace(line));
 		}
 	}
-	ConstructFaces();
+
+//	for(const auto& vert : verts){
+//		printf("%.2f,%.2f,%.2f,%.2f\n",vert.x,vert.y,vert.z,vert.w);
+//	}
+
 }
 
+ObjFile::~ObjFile(){}
 
-ObjFile::~ObjFile(){
+Face ObjFile::ParseFace(const std::string& vstring) const{
+	printf("Parsing face: \"%s\"\n",vstring.c_str());
+	Face f;
+	auto components = split(vstring,"\t\n ");
 
-}
-
-void ObjFile::ConstructFaces(){
-	//for each adjacency list
-	for(auto i = 0; i < face_refs.size(); ++i){
-		//derefrence the list
-		const auto vert_ref_arr = face_refs.at(i);
-		printf("Constructing face with adj ");
-		std::vector<Vec4> face;
-		for(const auto& vert_index : vert_ref_arr){
-			//for each index in the adj list, add a pointer.
-			printf(" %d",vert_index);
-			face.push_back((verts.at(vert_index - 1))); //one indexed
-		}
-		printf("\n");
-		faces.push_back(face);
-	}
-}
-
-
-std::vector<int> ObjFile::ParseFaceRef(const std::string& vstring){
-	printf("Parsing face line: \"%s\"\n",vstring.c_str());
-	std::vector<int> face_ref;
-	//
-	//given an adjacency list string, split it into vector of strings
-	
-	auto vert_indexes = split(vstring,"\t\n ");
-	vert_indexes.erase( 
-		std::remove_if(vert_indexes.begin(), vert_indexes.end(), [](std::string s){
-			return !IsNum(s) || IsSpaces(s);
-		}),
-		vert_indexes.end()
+	//remove all non/essential data
+	components.erase(std::remove_if(components.begin(),components.end(), [](std::string x){
+				return !IsNum(x) | IsSpaces(x);
+		}), components.end()
 	);
-	//this looks scarily like javascript. removes all non integer tokens
 
-	//create adj list of ints, add to the face refs
-	for(const std::string& v_index : vert_indexes){
-		face_ref.push_back(boost::lexical_cast<unsigned,std::string>(v_index));
+	//TODO: Make this work for more than just verts
+	for(const auto& v : components){
+		f.vert_adj.push_back(boost::lexical_cast<float>(v));
 	}
-	return face_ref;
+	
+	return f;
 }
 
+Vec3 ObjFile::ParseNormal(const std::string& vstring) const{
+	printf("Parsing normal: \"%s\"\n",vstring.c_str());
+	Vec3 normal;
+	auto components = split(vstring," ");
 
-Vec4 ObjFile::ParseVertex(const std::string& vstring){
-	printf("Parsing vertex or normal: \"%s\"\n",vstring.c_str());
+	normal.x = boost::lexical_cast<float,std::string>(components.at(1));
+	normal.y = boost::lexical_cast<float,std::string>(components.at(2));
+	normal.z = boost::lexical_cast<float,std::string>(components.at(3));
+
+	return normal.normalized();
+}
+
+Vec3 ObjFile::ParseTexture(const std::string& vstring) const{
+	printf("Parsing texture: \"%s\"\n",vstring.c_str());
+	Vec3 texture;
+	int num_components = std::count_if(vstring.begin(), vstring.end(),[](unsigned char c){
+			return std::isspace(c);});
+
+	auto components = split(vstring," ");
+	
+	if(num_components < 3){
+		texture.z = 0;
+	} else {
+		texture.z = boost::lexical_cast<float,std::string>(components.at(3));
+	}
+	return texture;
+}
+
+Vec4 ObjFile::ParseVertex(const std::string& vstring) const{
+	printf("Parsing vertex: \"%s\"\n",vstring.c_str());
 	Vec4 vertex;
 	//get the number of components that are given
 	int num_components = std::count_if(vstring.begin(), vstring.end(),[](unsigned char c){

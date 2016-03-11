@@ -168,6 +168,7 @@ void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c) const{
 }
 
 
+
 void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) const{
 	std::vector<Vertex> corrected = poly;
 	Mat4 proj = Mat4::Projection();
