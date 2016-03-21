@@ -9,6 +9,7 @@
 #define GRAPHICS_GRAPHICS_H_
 
 #include <vector>
+#include <functional>
 
 #include "Math/Vec3/Vec3.h"
 #include "Math/Vec4/Vec4.h"
@@ -44,14 +45,17 @@ class Graphics {
 		void LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const;
 
 		void Line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
-		inline void PutPixel(int32_t x, int32_t y, const Color &c) const;
+		void PutPixel(int32_t x, int32_t y, const Color &c) const;
 		inline void SetColor(const Color &c) const;
 
 		void Triangle(const std::array<Vec4,3>& tri, const Color& c) const;
 		void Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const;
 
+		//std::transform
 		void Polygon(const std::vector<Vertex>& poly, const Color& c) const;
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const;
+
+		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
 		virtual ~Graphics();
 

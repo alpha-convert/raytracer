@@ -1,0 +1,261 @@
+\hypertarget{class_vec3}{}\section{Vec3 Class Reference}
+\label{class_vec3}\index{Vec3@{Vec3}}
+
+
+{\ttfamily \#include $<$Vec3.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_vec3_aae7a1ffaa1108a30c281da216d1cd312}{Vec3} ()
+\item 
+\hyperlink{class_vec3_ab16df64046dd85eaa0983e8502cb8f19}{Vec3} (float, float, float)
+\item 
+float \hyperlink{class_vec3_a5b44c16b42617688072da32be123fb5a}{mag} () const 
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_adec48f417bf615cc6cf0a8ffe341f1de}{operator+} (const \hyperlink{class_vec3}{Vec3} \&v) const 
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_a49049bcd64d50fda9b7ff12faec03792}{operator-\/} (const \hyperlink{class_vec3}{Vec3} \&v) const 
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_a4f37a5335b2f21e22e70ffb71eb54309}{operator$\ast$} (float f) const 
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_a98f59bab30c80bdae1a3655df3c6fae6}{operator/} (float f) const 
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_a409f2d24c2f1df322ff7c44cebfd5094}{operator-\/} () const 
+\item 
+\hyperlink{class_vec3_a850a513210b4c946b80ceab32bdb032c}{operator Quat} () const 
+\item 
+\hyperlink{class_vec3_ae0661cc81af0cf260ddf543b5a3f483d}{operator Vec2} () const 
+\item 
+\hyperlink{class_vec3_a4c5bbeab21a22d5b1997c44479cad115}{operator Vec4} () const 
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_a8a0ad811b0676d6374aed339f3c4f761}{normalized} () const 
+\item 
+void \hyperlink{class_vec3_a324755bebf445a660cb0834cdf5550da}{normalize\+In\+Place} ()
+\item 
+float \hyperlink{class_vec3_a3e44be3e38e8a09790627c88d7357f06}{dot} (const \hyperlink{class_vec3}{Vec3} \&v) const 
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_a85bfd45b956fdd79f7686b9d220576f5}{cross} (const \hyperlink{class_vec3}{Vec3} \&v) const 
+\item 
+void \hyperlink{class_vec3_aabeebb8a2e0050e57ff195a300c6396d}{cross\+In\+Place} (const \hyperlink{class_vec3}{Vec3} \&v)
+\item 
+\hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_aaa44770080f63a89e68f2bee866905e0}{rotate} (const \hyperlink{class_quat}{Quat} \&q) const 
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \hyperlink{class_vec3_a4cec0cb414193b5dc60e373e8b4f25c7}{normalize} (\hyperlink{class_vec3}{Vec3} \&v)
+\item 
+static float \hyperlink{class_vec3_a53e170680780a9654f23d71e94ad91a2}{dot} (const \hyperlink{class_vec3}{Vec3} \&a, const \hyperlink{class_vec3}{Vec3} \&b)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \hyperlink{class_vec3_a2814580e9b9372738c0a61197ea46b51}{x}
+\begin{DoxyCompactList}\small\item\em x component \end{DoxyCompactList}\item 
+float \hyperlink{class_vec3_abc1d241232cb04aa98217a942402ae68}{y}
+\begin{DoxyCompactList}\small\item\em y component \end{DoxyCompactList}\item 
+float \hyperlink{class_vec3_a64f3f00cd2dd9076999eeb2f05210388}{z}
+\begin{DoxyCompactList}\small\item\em z component \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_add5a2050e91f51b298f1dd090b787699}{I} = \hyperlink{class_vec3}{Vec3}(1,0,0)
+\begin{DoxyCompactList}\small\item\em Unit vector in +x direction. \end{DoxyCompactList}\item 
+static const \hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_ac1e43635a71f5a915bb476c7f4b1bf66}{J} = \hyperlink{class_vec3}{Vec3}(0,1,0)
+\begin{DoxyCompactList}\small\item\em Unit vector in +y direction. \end{DoxyCompactList}\item 
+static const \hyperlink{class_vec3}{Vec3} \hyperlink{class_vec3_a5fb51fc9782efd8911219213ca58727a}{K} = \hyperlink{class_vec3}{Vec3}(0,0,1)
+\begin{DoxyCompactList}\small\item\em Unit vector in +z direction. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Vec3@{Vec3}!Vec3@{Vec3}}
+\index{Vec3@{Vec3}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{Vec3()}{Vec3()}}]{\setlength{\rightskip}{0pt plus 5cm}Vec3\+::\+Vec3 (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_vec3_aae7a1ffaa1108a30c281da216d1cd312}{}\label{class_vec3_aae7a1ffaa1108a30c281da216d1cd312}
+\index{Vec3@{Vec3}!Vec3@{Vec3}}
+\index{Vec3@{Vec3}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{Vec3(float, float, float)}{Vec3(float, float, float)}}]{\setlength{\rightskip}{0pt plus 5cm}Vec3\+::\+Vec3 (
+\begin{DoxyParamCaption}
+\item[{float}]{x, }
+\item[{float}]{y, }
+\item[{float}]{z}
+\end{DoxyParamCaption}
+)}\hypertarget{class_vec3_ab16df64046dd85eaa0983e8502cb8f19}{}\label{class_vec3_ab16df64046dd85eaa0983e8502cb8f19}
+
+
+\subsection{Member Function Documentation}
+\index{Vec3@{Vec3}!cross@{cross}}
+\index{cross@{cross}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{cross(const Vec3 \&v) const }{cross(const Vec3 &v) const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::cross (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vec3} \&}]{v}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a85bfd45b956fdd79f7686b9d220576f5}{}\label{class_vec3_a85bfd45b956fdd79f7686b9d220576f5}
+\index{Vec3@{Vec3}!cross\+In\+Place@{cross\+In\+Place}}
+\index{cross\+In\+Place@{cross\+In\+Place}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{cross\+In\+Place(const Vec3 \&v)}{crossInPlace(const Vec3 &v)}}]{\setlength{\rightskip}{0pt plus 5cm}void Vec3\+::cross\+In\+Place (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vec3} \&}]{v}
+\end{DoxyParamCaption}
+)}\hypertarget{class_vec3_aabeebb8a2e0050e57ff195a300c6396d}{}\label{class_vec3_aabeebb8a2e0050e57ff195a300c6396d}
+\index{Vec3@{Vec3}!dot@{dot}}
+\index{dot@{dot}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{dot(const Vec3 \&v) const }{dot(const Vec3 &v) const }}]{\setlength{\rightskip}{0pt plus 5cm}float Vec3\+::dot (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vec3} \&}]{v}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a3e44be3e38e8a09790627c88d7357f06}{}\label{class_vec3_a3e44be3e38e8a09790627c88d7357f06}
+\index{Vec3@{Vec3}!dot@{dot}}
+\index{dot@{dot}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{dot(const Vec3 \&a, const Vec3 \&b)}{dot(const Vec3 &a, const Vec3 &b)}}]{\setlength{\rightskip}{0pt plus 5cm}float Vec3\+::dot (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vec3} \&}]{a, }
+\item[{const {\bf Vec3} \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{class_vec3_a53e170680780a9654f23d71e94ad91a2}{}\label{class_vec3_a53e170680780a9654f23d71e94ad91a2}
+\index{Vec3@{Vec3}!mag@{mag}}
+\index{mag@{mag}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{mag() const }{mag() const }}]{\setlength{\rightskip}{0pt plus 5cm}float Vec3\+::mag (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a5b44c16b42617688072da32be123fb5a}{}\label{class_vec3_a5b44c16b42617688072da32be123fb5a}
+\index{Vec3@{Vec3}!normalize@{normalize}}
+\index{normalize@{normalize}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{normalize(\+Vec3 \&v)}{normalize(Vec3 &v)}}]{\setlength{\rightskip}{0pt plus 5cm}void Vec3\+::normalize (
+\begin{DoxyParamCaption}
+\item[{{\bf Vec3} \&}]{v}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{class_vec3_a4cec0cb414193b5dc60e373e8b4f25c7}{}\label{class_vec3_a4cec0cb414193b5dc60e373e8b4f25c7}
+\index{Vec3@{Vec3}!normalized@{normalized}}
+\index{normalized@{normalized}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{normalized() const }{normalized() const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::normalized (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a8a0ad811b0676d6374aed339f3c4f761}{}\label{class_vec3_a8a0ad811b0676d6374aed339f3c4f761}
+\index{Vec3@{Vec3}!normalize\+In\+Place@{normalize\+In\+Place}}
+\index{normalize\+In\+Place@{normalize\+In\+Place}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{normalize\+In\+Place()}{normalizeInPlace()}}]{\setlength{\rightskip}{0pt plus 5cm}void Vec3\+::normalize\+In\+Place (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_vec3_a324755bebf445a660cb0834cdf5550da}{}\label{class_vec3_a324755bebf445a660cb0834cdf5550da}
+\index{Vec3@{Vec3}!operator Quat@{operator Quat}}
+\index{operator Quat@{operator Quat}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator Quat() const }{operator Quat() const }}]{\setlength{\rightskip}{0pt plus 5cm}Vec3\+::operator {\bf Quat} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a850a513210b4c946b80ceab32bdb032c}{}\label{class_vec3_a850a513210b4c946b80ceab32bdb032c}
+\index{Vec3@{Vec3}!operator Vec2@{operator Vec2}}
+\index{operator Vec2@{operator Vec2}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator Vec2() const }{operator Vec2() const }}]{\setlength{\rightskip}{0pt plus 5cm}Vec3\+::operator {\bf Vec2} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_ae0661cc81af0cf260ddf543b5a3f483d}{}\label{class_vec3_ae0661cc81af0cf260ddf543b5a3f483d}
+\index{Vec3@{Vec3}!operator Vec4@{operator Vec4}}
+\index{operator Vec4@{operator Vec4}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator Vec4() const }{operator Vec4() const }}]{\setlength{\rightskip}{0pt plus 5cm}Vec3\+::operator {\bf Vec4} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a4c5bbeab21a22d5b1997c44479cad115}{}\label{class_vec3_a4c5bbeab21a22d5b1997c44479cad115}
+\index{Vec3@{Vec3}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator$\ast$(float f) const }{operator*(float f) const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::operator$\ast$ (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a4f37a5335b2f21e22e70ffb71eb54309}{}\label{class_vec3_a4f37a5335b2f21e22e70ffb71eb54309}
+\index{Vec3@{Vec3}!operator+@{operator+}}
+\index{operator+@{operator+}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator+(const Vec3 \&v) const }{operator+(const Vec3 &v) const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::operator+ (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vec3} \&}]{v}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_adec48f417bf615cc6cf0a8ffe341f1de}{}\label{class_vec3_adec48f417bf615cc6cf0a8ffe341f1de}
+\index{Vec3@{Vec3}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator-\/(const Vec3 \&v) const }{operator-(const Vec3 &v) const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::operator-\/ (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vec3} \&}]{v}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a49049bcd64d50fda9b7ff12faec03792}{}\label{class_vec3_a49049bcd64d50fda9b7ff12faec03792}
+\index{Vec3@{Vec3}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator-\/() const }{operator-() const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::operator-\/ (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a409f2d24c2f1df322ff7c44cebfd5094}{}\label{class_vec3_a409f2d24c2f1df322ff7c44cebfd5094}
+\index{Vec3@{Vec3}!operator/@{operator/}}
+\index{operator/@{operator/}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{operator/(float f) const }{operator/(float f) const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::operator/ (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_a98f59bab30c80bdae1a3655df3c6fae6}{}\label{class_vec3_a98f59bab30c80bdae1a3655df3c6fae6}
+\index{Vec3@{Vec3}!rotate@{rotate}}
+\index{rotate@{rotate}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{rotate(const Quat \&q) const }{rotate(const Quat &q) const }}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec3} Vec3\+::rotate (
+\begin{DoxyParamCaption}
+\item[{const {\bf Quat} \&}]{q}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_vec3_aaa44770080f63a89e68f2bee866905e0}{}\label{class_vec3_aaa44770080f63a89e68f2bee866905e0}
+
+
+\subsection{Member Data Documentation}
+\index{Vec3@{Vec3}!I@{I}}
+\index{I@{I}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{I}{I}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vec3} Vec3\+::I = {\bf Vec3}(1,0,0)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{class_vec3_add5a2050e91f51b298f1dd090b787699}{}\label{class_vec3_add5a2050e91f51b298f1dd090b787699}
+
+
+Unit vector in +x direction. 
+
+\index{Vec3@{Vec3}!J@{J}}
+\index{J@{J}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{J}{J}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vec3} Vec3\+::J = {\bf Vec3}(0,1,0)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{class_vec3_ac1e43635a71f5a915bb476c7f4b1bf66}{}\label{class_vec3_ac1e43635a71f5a915bb476c7f4b1bf66}
+
+
+Unit vector in +y direction. 
+
+\index{Vec3@{Vec3}!K@{K}}
+\index{K@{K}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{K}{K}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vec3} Vec3\+::K = {\bf Vec3}(0,0,1)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{class_vec3_a5fb51fc9782efd8911219213ca58727a}{}\label{class_vec3_a5fb51fc9782efd8911219213ca58727a}
+
+
+Unit vector in +z direction. 
+
+\index{Vec3@{Vec3}!x@{x}}
+\index{x@{x}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{x}{x}}]{\setlength{\rightskip}{0pt plus 5cm}float Vec3\+::x}\hypertarget{class_vec3_a2814580e9b9372738c0a61197ea46b51}{}\label{class_vec3_a2814580e9b9372738c0a61197ea46b51}
+
+
+x component 
+
+\index{Vec3@{Vec3}!y@{y}}
+\index{y@{y}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{y}{y}}]{\setlength{\rightskip}{0pt plus 5cm}float Vec3\+::y}\hypertarget{class_vec3_abc1d241232cb04aa98217a942402ae68}{}\label{class_vec3_abc1d241232cb04aa98217a942402ae68}
+
+
+y component 
+
+\index{Vec3@{Vec3}!z@{z}}
+\index{z@{z}!Vec3@{Vec3}}
+\subsubsection[{\texorpdfstring{z}{z}}]{\setlength{\rightskip}{0pt plus 5cm}float Vec3\+::z}\hypertarget{class_vec3_a64f3f00cd2dd9076999eeb2f05210388}{}\label{class_vec3_a64f3f00cd2dd9076999eeb2f05210388}
+
+
+z component 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Math/\+Vec3/\hyperlink{_vec3_8h}{Vec3.\+h}\item 
+src/\+Math/\+Vec3/\hyperlink{_vec3_8cpp}{Vec3.\+cpp}\end{DoxyCompactItemize}

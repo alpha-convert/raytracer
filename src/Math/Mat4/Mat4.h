@@ -32,8 +32,6 @@ public:
 
 	static Mat4 Scale(float f);
 
-
-
 	Mat4 operator*(float f) const;
 	Mat4 operator*(const Mat4& m) const;
 	Vec4 operator*(const Vec4& v) const;

@@ -1,0 +1,121 @@
+\hypertarget{class_a_v_l_tree}{}\section{A\+V\+L\+Tree$<$ T $>$ Class Template Reference}
+\label{class_a_v_l_tree}\index{A\+V\+L\+Tree$<$ T $>$@{A\+V\+L\+Tree$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Tree.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_a_v_l_tree_aa92f37ed71cd2da834bfe21fed0df18e}{A\+V\+L\+Tree} (T rootval)
+\item 
+\hyperlink{class_a_v_l_tree_a9fab28b32e97ffc5e0f1a4ed3d9823b2}{A\+V\+L\+Tree} ()
+\item 
+\hyperlink{class_a_v_l_tree_ae7bb44a235074a48d817acbc32846ae7}{$\sim$\+A\+V\+L\+Tree} ()
+\item 
+unsigned int \hyperlink{class_a_v_l_tree_ad5560dc291c57ef2646e33f265c20a54}{Height} ()
+\item 
+void \hyperlink{class_a_v_l_tree_a76f21ced7264f2017e6bdbe525855722}{Balance} ()
+\item 
+void \hyperlink{class_a_v_l_tree_abba774bea66f9b03ff66a406b9cdd65b}{Insert} (T item)
+\item 
+bool \hyperlink{class_a_v_l_tree_aadba0f22d2ef0154a66079fe5c32021a}{Delete} (T item)
+\item 
+\hyperlink{class_node}{Node}$<$ T $>$ $\ast$ \hyperlink{class_a_v_l_tree_a84b5fc040fed66040bd15b97ebba3ca1}{Search} (T item)
+\item 
+void \hyperlink{class_a_v_l_tree_a4d16fca435b7af49afa489ab3a9f9931}{Apply} (const std\+::function$<$ T(T)$>$ \&f)
+\item 
+void \hyperlink{class_a_v_l_tree_a4c3538f1431692bb0ae6402f9e1564f1}{Print} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_node}{Node}$<$ T $>$ $\ast$ \hyperlink{class_a_v_l_tree_a12af214b02aa42b44254eca52bc0ea59}{root}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{A\+V\+L\+Tree(\+T rootval)}{AVLTree(T rootval)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf A\+V\+L\+Tree}$<$ T $>$\+::{\bf A\+V\+L\+Tree} (
+\begin{DoxyParamCaption}
+\item[{T}]{rootval}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_aa92f37ed71cd2da834bfe21fed0df18e}{}\label{class_a_v_l_tree_aa92f37ed71cd2da834bfe21fed0df18e}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{A\+V\+L\+Tree()}{AVLTree()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf A\+V\+L\+Tree}$<$ T $>$\+::{\bf A\+V\+L\+Tree} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_a9fab28b32e97ffc5e0f1a4ed3d9823b2}{}\label{class_a_v_l_tree_a9fab28b32e97ffc5e0f1a4ed3d9823b2}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!````~A\+V\+L\+Tree@{$\sim$\+A\+V\+L\+Tree}}
+\index{````~A\+V\+L\+Tree@{$\sim$\+A\+V\+L\+Tree}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{$\sim$\+A\+V\+L\+Tree()}{~AVLTree()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf A\+V\+L\+Tree}$<$ T $>$\+::$\sim${\bf A\+V\+L\+Tree} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_ae7bb44a235074a48d817acbc32846ae7}{}\label{class_a_v_l_tree_ae7bb44a235074a48d817acbc32846ae7}
+
+
+\subsection{Member Function Documentation}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!Apply@{Apply}}
+\index{Apply@{Apply}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{Apply(const std\+::function$<$ T(\+T)$>$ \&f)}{Apply(const std::function< T(T)> &f)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void {\bf A\+V\+L\+Tree}$<$ T $>$\+::Apply (
+\begin{DoxyParamCaption}
+\item[{const std\+::function$<$ T(T)$>$ \&}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_a4d16fca435b7af49afa489ab3a9f9931}{}\label{class_a_v_l_tree_a4d16fca435b7af49afa489ab3a9f9931}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!Balance@{Balance}}
+\index{Balance@{Balance}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{Balance()}{Balance()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void {\bf A\+V\+L\+Tree}$<$ T $>$\+::Balance (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_a_v_l_tree_a76f21ced7264f2017e6bdbe525855722}{}\label{class_a_v_l_tree_a76f21ced7264f2017e6bdbe525855722}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!Delete@{Delete}}
+\index{Delete@{Delete}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{Delete(\+T item)}{Delete(T item)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ bool {\bf A\+V\+L\+Tree}$<$ T $>$\+::Delete (
+\begin{DoxyParamCaption}
+\item[{T}]{item}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_aadba0f22d2ef0154a66079fe5c32021a}{}\label{class_a_v_l_tree_aadba0f22d2ef0154a66079fe5c32021a}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!Height@{Height}}
+\index{Height@{Height}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{Height()}{Height()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ unsigned int {\bf A\+V\+L\+Tree}$<$ T $>$\+::Height (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_a_v_l_tree_ad5560dc291c57ef2646e33f265c20a54}{}\label{class_a_v_l_tree_ad5560dc291c57ef2646e33f265c20a54}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!Insert@{Insert}}
+\index{Insert@{Insert}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{Insert(\+T item)}{Insert(T item)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void {\bf A\+V\+L\+Tree}$<$ T $>$\+::Insert (
+\begin{DoxyParamCaption}
+\item[{T}]{item}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_abba774bea66f9b03ff66a406b9cdd65b}{}\label{class_a_v_l_tree_abba774bea66f9b03ff66a406b9cdd65b}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!Print@{Print}}
+\index{Print@{Print}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{Print()}{Print()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void {\bf A\+V\+L\+Tree}$<$ T $>$\+::Print (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_a4c3538f1431692bb0ae6402f9e1564f1}{}\label{class_a_v_l_tree_a4c3538f1431692bb0ae6402f9e1564f1}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!Search@{Search}}
+\index{Search@{Search}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{Search(\+T item)}{Search(T item)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf Node}$<$T$>$$\ast$ {\bf A\+V\+L\+Tree}$<$ T $>$\+::Search (
+\begin{DoxyParamCaption}
+\item[{T}]{item}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_a_v_l_tree_a84b5fc040fed66040bd15b97ebba3ca1}{}\label{class_a_v_l_tree_a84b5fc040fed66040bd15b97ebba3ca1}
+
+
+\subsection{Member Data Documentation}
+\index{A\+V\+L\+Tree@{A\+V\+L\+Tree}!root@{root}}
+\index{root@{root}!A\+V\+L\+Tree@{A\+V\+L\+Tree}}
+\subsubsection[{\texorpdfstring{root}{root}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf Node}$<$T$>$$\ast$ {\bf A\+V\+L\+Tree}$<$ T $>$\+::root}\hypertarget{class_a_v_l_tree_a12af214b02aa42b44254eca52bc0ea59}{}\label{class_a_v_l_tree_a12af214b02aa42b44254eca52bc0ea59}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Math/\+Tree/\hyperlink{_tree_8h}{Tree.\+h}\end{DoxyCompactItemize}

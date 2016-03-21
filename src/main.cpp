@@ -8,6 +8,7 @@
 #include "Math/Quat/Quat.h"
 #include "Math/Mat4/Mat4.h"
 #include "ObjFile/ObjFile.h"
+#include "Math/Tree/Tree.h"
 
 #include "Graphics/Graphics.h"
 #include "OpenGL/OpenGL.h"
@@ -22,7 +23,28 @@
 int main(int argc, char** argv){
 	(void) argc;
 	(void) argv;
-	
+
+//	AVLTree<unsigned int> tree = AVLTree<unsigned int>(7);
+	AVLTree<int> tree = AVLTree<int>(8);
+	tree.Insert(3);
+	tree.Insert(10);
+	tree.Insert(1);
+	tree.Insert(6);
+	tree.Insert(4);
+	tree.Insert(7);
+	tree.Insert(14);
+	tree.Insert(13);
+
+//	tree.root->MakeLeft(2);
+//	tree.root->MakeRight(30);
+
+	tree.Print();
+
+//	tree.Apply([](unsigned int i){
+//			printf("%d\n",i);
+//			return i;
+//	});
+
 	auto tbl = Vertex(Vec4(-1,1,1),		{1,3,4});
 	auto tbr = Vertex(Vec4(1,1,1),		{0,2,5});
 	auto tfr = Vertex(Vec4(1,1,-1),		{1,3,6});
@@ -75,22 +97,38 @@ int main(int argc, char** argv){
 		v.pos = initial_trans * initial_scale * v.pos.rotate(initial_rot);
 	}
 
-	bool running =  true;
+	//TODO:TRUE TO RUN
+	bool running =  false;
 
 	while(running){
+		//TODO: DEBUGGING
+//		running = false;
 		if(SDL_PollEvent(&e)){
 			if(e.type == SDL_QUIT || e.window.event == SDL_WINDOWEVENT_CLOSE){
 				running = false;
 			}
 		}
 
+		i += 0.5;
+		const auto proj = Mat4::Projection();
+
 		g.Clear();
-		auto rotation_axis = (Vec3::J).normalized();
-		q = Quat::rotation(rotation_axis,DEG(i));
-		for(auto& v : cube){
-			v.pos = v.pos.rotate(q);
-		}
-		g.Polygon(cube,Color::Green);
+
+
+//		g.Polygon(cube,Color::Green,[&](Vec4 v){
+//			auto scale = v.z;
+//			v = (proj * v) / scale;
+//			return v;
+//		});
+
+	//	g.Polygon(cube,Color::Green,Quat::rotation(Vec3::I,DEG(i)));
+
+//		auto rotation_axis = (Vec3::J).normalized();
+//		q = Quat::rotation(rotation_axis,DEG(i));
+//		for(auto& v : cube){
+//			v.pos = v.pos.rotate(q);
+//		}
+//		g.Polygon(cube,Color::Green);
 
 		g.Update();
 

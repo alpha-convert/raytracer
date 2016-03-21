@@ -16,6 +16,7 @@
 #include <stdlib.h>
 
 #include <array>
+#include <functional>
 
 //General graphics flow:
 
@@ -92,14 +93,14 @@ void Graphics::Line(int32_t x1, int y1, int x2, int y2, const Color &c) const {
 
 
 
-inline void Graphics::PutPixel(int x, int y, const Color &c) const {
+void Graphics::PutPixel(int x, int y, const Color &c) const {
 	if (!(x > this->width && x < 0 && y > this->height && y < 0)) {
 		SetColor(c);
 		SDL_RenderDrawPoint(this->renderer, x, y);
 	} else {
-		fprintf(stderr,
-				"Error putting pixel at (%d,%d) with color (%d,%d,%d)\n", x, y,
-				c.r, c.g, c.b);
+//		fprintf(stderr,
+//				"Error putting pixel at (%d,%d) with color (%d,%d,%d)\n", x, y,
+//				c.r, c.g, c.b);
 	}
 }
 
@@ -198,6 +199,19 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const Qu
 	for(const auto& vertex : poly){
 		for(const auto vert_ref : vertex.adj){
 			this->LineFromVec(vertex.pos.rotate(rotation),poly[vert_ref].pos.rotate(rotation),c);
+		}
+	}
+}
+
+void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform){
+	auto post_transform = poly;
+	for(auto& vert : post_transform){
+		vert.pos = transform(vert.pos);
+	}
+
+	for(const auto& vertex : post_transform){
+		for(const auto vert_ref : vertex.adj){
+			this->LineFromVec(vertex.pos,post_transform[vert_ref].pos,c);
 		}
 	}
 }

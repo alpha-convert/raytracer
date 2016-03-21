@@ -17,14 +17,16 @@ class Vec4;
 
 class Vec3{
 public:
-	float x,y,z;
+	float x; ///< x component
+	float y; ///< y component
+	float z; ///< z component
 
 	Vec3();
 	Vec3(float,float,float);
 
-	static const Vec3 I;
-	static const Vec3 J;
-	static const Vec3 K;
+	static const Vec3 I;	///< Unit vector in +x direction
+	static const Vec3 J;	///< Unit vector in +y direction
+	static const Vec3 K;	///< Unit vector in +z direction
 
 	float mag() const;
 

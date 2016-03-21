@@ -1,4 +1,4 @@
-CXX=clang++
+CXX=g++
 CC=gcc
 AS=as
 
@@ -10,31 +10,29 @@ LIBS=-framework SDL2 -framework OpenGL -framework GLUT /usr/local/lib/libGLEW.dy
 
 CXXFLAGS:=-Wall -Wextra -O0 -g -ggdb -march=native -ftrapv -Wundef -fverbose-asm $(INCLUDES) -std=c++11 -Wno-sign-compare
 CFLAGS:=-Wall -Wextra -O2 -ftrapv -Wundef -fverbose-asm
-ASFLAGS:=
-
-LD_FLAGS:=$(LIBS)
 
 CPP_FILES := $(shell find src -name '*.cpp')
 C_FILES := $(shell find src -name '*.c')
 AS_FILES := $(shell find src -name '*.as')
-SOURCES := $(CPP_FILES:.cpp=.o) $(C_FILES.cpp=.o) $(AS_FILES.cpp=.o)
+LD_FLAGS := $(LIBS)
+SOURCES := $(CPP_FILES:.cpp=.o) $(C_FILES:.c=.o) $(AS_FILES:.S=.o)
 OBJS := $(foreach file, $(SOURCES), $(file))
 
 all: $(OBJS)
-	@echo "[LD] ./$(EXEC)"
-	@$(CXX) $(OBJS) -o $(EXEC) $(LD_FLAGS)
+#	@echo "[LD] ./$(EXEC)" 
+	$(CXX) $(OBJS) -o $(EXEC) $(LD_FLAGS)
 
 %o: %cpp
-	@echo "[CXX] $@"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+#	@echo "[CXX] $@"
+	$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 %o: %c
-	@echo "[C] $@"
-	@$(C) $(CFLAGS) -o "$@" -c "$<"
+#	@echo "[C] $@"
+	$(CC) $(CFLAGS) -o "$@" -c "$<"
 
 %o: %as
-	@echo "[AS] $@"
-	@$(AS) $(ASFLAGS) -o "$@" -c "$<"
+#	@echo "[AS] $@"
+	$(AS) $(ASFLAGS) -o "$@" -c "$<"
 
 
 clean:

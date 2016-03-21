@@ -9,9 +9,19 @@ class Vec3;
 class Quat;
 #endif
 
+/* *
+ * \class Vec4
+ * \brief 4-component vector (x,y,z,w)
+ * \author Joseph Cutler
+ * \date
+ */
+
 class Vec4{
 public:
-	float x,y,z,w;
+	float x; /**<x-component of vec4*/
+	float y; /**<y-component of vec4*/
+	float z; /**<z-component of vec4*/
+	float w; /**<w-component of vec4*/
 
 	Vec4();
 	Vec4(float,float,float,float);
