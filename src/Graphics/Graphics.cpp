@@ -4,7 +4,6 @@
  *  Created on: Oct 28, 2015
  *      Author: Admin
  */
-
 #define FLEQUAL(a,b) (std::abs(a - b) < 0.001)
 #include "Graphics.h"
 #include <SDL2/SDL.h>
@@ -33,16 +32,16 @@ Graphics::Graphics(uint32_t width, uint32_t height, const char *name) {
 	if (!this->window) {
 		fprintf(stderr, "Error creating window, %s\n", SDL_GetError());
 	}
+	assert(window != nullptr);
 
 	this->renderer = SDL_CreateRenderer(this->window, -1,
 			SDL_RENDERER_ACCELERATED);
 	if (!this->renderer) {
 		fprintf(stderr,"Error creating renderer: %s", SDL_GetError());
-
 	}
+	assert(renderer!= nullptr);
 
 	auto screen_dist = 100;
-#define SQ(x) (x*x)
 	auto hypot = sqrt(SQ(width/2)+SQ(screen_dist));
 	auto cos_horiz_angle = 2*acos(screen_dist/hypot);
 	auto sin_horiz_angle = 2*asin(width/(2*hypot));
@@ -70,8 +69,6 @@ void Graphics::Update() {
 
 }
 
-//TODO: fix to acutally work with real transformations
-//http://www.tomdalling.com/blog/modern-opengl/explaining-homogenous-coordinates-and-projective-geometry/
 void Graphics::ProjectVec3(const Vec3 &v, const Color &c, int scalar) const{
 	this->SpaceLine(0, 0, v.dot(Vec3::I) * scalar, v.dot(Vec3::J) * scalar, c);
 }
@@ -80,8 +77,7 @@ void Graphics::LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const
 	this->SpaceLine(v1.x, v1.y, v2.x, v2.y, c);
 }
 
-
-inline void Graphics::SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2,const Color &c) const {
+void Graphics::SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2,const Color &c) const {
 	Line(this->width / 2 + x1, this->height / 2 - y1, this->width / 2 + x2,
 			this->height / 2 - y2, c);
 }
@@ -118,7 +114,7 @@ void Graphics::SetColor(const Color &c) const {
 }
 
 Color Graphics::SDLColorToColor(uint32_t n) const{
-	Color c =Color(0,0,0);
+	Color c = Color(0,0,0);
 	c.r = n & 0xff000000;
 	c.g = n & 0xff0000;
 	c.b = n & 0xff00;
@@ -216,18 +212,9 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const st
 	}
 }
 
-ScreenPoint Graphics::Vec3ToScreenPoint(const Vec3& v){
-	ScreenPoint p;
-	p.x = floor(v.x) + width/2;
-	p.y = floor(v.y) + height/2;
-	return p;
-}
-
-
-Vec3 Graphics::ScreenPointToVec3(const ScreenPoint &p){
-	Vec3 v;
-	v.z = 0;
-	v.x = p.x - width/2;
-	v.y = p.y - height/2;
-	return v;
+ConventionalPoint::ConventionalPoint(int8_t x, int8_t y){
+	assert(INEQ(-1,<=,x,<=,1));
+	assert(INEQ(-1,<=,y,<=,1));
+	this->x = x;
+	this->y = y;
 }
