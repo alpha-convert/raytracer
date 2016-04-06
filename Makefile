@@ -4,6 +4,8 @@ AS=as
 
 EXEC=$(notdir $(CURDIR))
 
+DOCS=docs
+
 INCLUDES=-I./src -I./src/math
 
 LIBS=-framework SDL2 -framework OpenGL -framework GLUT /usr/local/lib/libGLEW.dylib
@@ -18,25 +20,33 @@ LD_FLAGS := $(LIBS)
 SOURCES := $(CPP_FILES:.cpp=.o) $(C_FILES:.c=.o) $(AS_FILES:.S=.o)
 OBJS := $(foreach file, $(SOURCES), $(file))
 
+.PHONY: docs
+
 all: $(OBJS)
-#	@echo "[LD] ./$(EXEC)" 
-	$(CXX) $(OBJS) -o $(EXEC) $(LD_FLAGS)
+	@echo "[LD] ./$(EXEC)" 
+	@$(CXX) $(OBJS) -o $(EXEC) $(LD_FLAGS)
+
+docs:
+	@echo "Generating docs for $(EXEC)"
+	@doxygen
+
 
 %o: %cpp
-#	@echo "[CXX] $@"
-	$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	@echo "[CXX] $@"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 %o: %c
-#	@echo "[C] $@"
-	$(CC) $(CFLAGS) -o "$@" -c "$<"
+	@echo "[C] $@"
+	@$(CC) $(CFLAGS) -o "$@" -c "$<"
 
 %o: %as
-#	@echo "[AS] $@"
-	$(AS) $(ASFLAGS) -o "$@" -c "$<"
+	@echo "[AS] $@"
+	@$(AS) $(ASFLAGS) -o "$@" -c "$<"
 
 
 clean:
 	rm -f $(EXEC) $(OBJS)
+	rm -rf $(DOCS)
 
 print-%:
 	@echo '$*=$($*)'
