@@ -12,7 +12,7 @@ public:
 	};
 
 	AVLTree(){
-		root = 0;
+		root = nullptr;
 	};
 
 	~AVLTree(){
@@ -46,6 +46,7 @@ public:
 
 	void Print(){
 		printf("digraph G{\n");
+		printf("graph [ordering=\"out\"];\n");
 		root->RecursivePrint();
 		printf("}\n");
 	};

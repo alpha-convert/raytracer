@@ -52,7 +52,8 @@ Vec3::operator Vec4() const{
 }
 
 Vec3 Vec3::normalized() const{
-	return *this/mag();
+	Vec3 v = *this;
+	return v/v.mag();
 
 }
 void Vec3::normalizeInPlace(){
@@ -92,4 +93,9 @@ float Vec3::dot(const Vec3& v) const{
 
 float Vec3::dot(const Vec3& a,const Vec3& b){
 	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+
+float Vec3::squared() const{
+	return this->dot(*this);
 }

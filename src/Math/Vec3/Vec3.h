@@ -15,19 +15,32 @@ class Vec4;
 #endif
 
 
+/**
+ * \class Vec3
+ * \brief 3 component vector (x,y,z)
+ * \author Joseph Cutler
+ * \date
+ */
 class Vec3{
 public:
-	float x; ///< x component
-	float y; ///< y component
-	float z; ///< z component
+	/** x component of Vec3 */
+	float x; 
+	 /** y component of Vec3 */
+	float y;
+	 /** z component of Vec3 */
+	float z;
 
 	Vec3();
 	Vec3(float,float,float);
 
-	static const Vec3 I;	///< Unit vector in +x direction
-	static const Vec3 J;	///< Unit vector in +y direction
-	static const Vec3 K;	///< Unit vector in +z direction
+	/**  Unit vector in +x direction */
+	static const Vec3 I;	
+	/**  Unit vector in +y direction */
+	static const Vec3 J;	
+	/**  Unit vector in +z direction */
+	static const Vec3 K;	
 
+	///Magnitude (or size) of Vec3.
 	float mag() const;
 
 	Vec3 operator+(const Vec3& v) const;
@@ -46,6 +59,8 @@ public:
 
 	float dot(const Vec3& v) const;
 	static float dot(const Vec3& a,const Vec3& b);
+
+	float squared() const;
 
 	Vec3 cross(const Vec3& v) const;
 	void crossInPlace(const Vec3& v);
