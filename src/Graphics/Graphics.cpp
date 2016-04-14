@@ -4,7 +4,6 @@
  *  Created on: Oct 28, 2015
  *      Author: Admin
  */
-#define FLEQUAL(a,b) (std::abs(a - b) < 0.001)
 #include "Graphics.h"
 #include <SDL2/SDL.h>
 #include <execinfo.h>
@@ -16,6 +15,7 @@
 
 #include <array>
 #include <functional>
+#include <algorithm>
 
 //General graphics flow:
 
@@ -41,20 +41,6 @@ Graphics::Graphics(uint32_t width, uint32_t height, const char *name) {
 	}
 	assert(renderer!= nullptr);
 
-	auto screen_dist = 100;
-	auto hypot = sqrt(SQ(width/2)+SQ(screen_dist));
-	auto cos_horiz_angle = 2*acos(screen_dist/hypot);
-	auto sin_horiz_angle = 2*asin(width/(2*hypot));
-	assert(FLEQUAL(cos_horiz_angle,sin_horiz_angle));
-
-	horizontal_angle = cos_horiz_angle;
-
-	hypot = sqrt(SQ(height/2)+SQ(screen_dist));
-	cos_horiz_angle = 2*acos(screen_dist/hypot);
-	sin_horiz_angle = 2*asin(height/(2*hypot));
-	assert(FLEQUAL(cos_horiz_angle,sin_horiz_angle));
-
-	vertical_angle = cos_horiz_angle;
 
 }
 
@@ -88,15 +74,20 @@ void Graphics::Line(int32_t x1, int y1, int x2, int y2, const Color &c) const {
 }
 
 
+void Graphics::Bezier(const Vec2 &begin, const Vec2 &end, const Vec2 &control, const Color &c) const{
+	int x_min = std::min(begin.x,end.x);
+	int y_min = std::min(begin.y,end.y);
+	(void) (x_min + y_min);
+	(void) control;
+	(void) c;
+}
+
+
 
 void Graphics::PutPixel(int x, int y, const Color &c) const {
 	if (!(x > this->width && x < 0 && y > this->height && y < 0)) {
 		SetColor(c);
 		SDL_RenderDrawPoint(this->renderer, x, y);
-	} else {
-//		fprintf(stderr,
-//				"Error putting pixel at (%d,%d) with color (%d,%d,%d)\n", x, y,
-//				c.r, c.g, c.b);
 	}
 }
 
@@ -132,7 +123,6 @@ Vec3 GetBarycentric(const Vec3 &t0, const Vec3 &t1, const Vec3 &t2, const Vec3 &
 
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
 void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const{
-
 	std::array<Vec4,3> corrected = tri;
 	(void) fill;
 	Mat4 proj = Mat4::Projection();

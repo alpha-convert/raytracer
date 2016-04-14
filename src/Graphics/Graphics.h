@@ -12,6 +12,7 @@
 #include <functional>
 #include <cstdint>
 
+#include "Math/Vec2/Vec2.h"
 #include "Math/Vec3/Vec3.h"
 #include "Math/Vec4/Vec4.h"
 #include "Math/Mat4/Mat4.h"
@@ -88,6 +89,9 @@ class Graphics {
 		void LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const;
 
 		void Line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
+
+		void Bezier(const Vec2 &begin, const Vec2 &end, const Vec2 &control, const Color &c = Color::Black) const;
+
 		void PutPixel(int32_t x, int32_t y, const Color &c) const;
 		inline void SetColor(const Color &c) const;
 
