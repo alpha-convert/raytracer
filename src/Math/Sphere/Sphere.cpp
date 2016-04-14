@@ -5,13 +5,10 @@ Sphere::Sphere(){
 	this->r = 0;
 }
 
-Sphere::Sphere(Vec3 pos, float r){
-	this->pos = pos;
-	this->r = r;
-}
+Sphere::Sphere(Vec3 pos, float r) : pos(pos), r(r){}
+
 bool wierd_quad_solve(const float a, const float b, const float c, float &x0, float &x1){
 	auto discr = SQ(b) - a*c;
-//	printf("Discr: %f\n",discr);
 	if(discr < 0) return false;
 	x0 = (-b + sqrt(discr));
 	x1 = (-b - sqrt(discr));
@@ -43,3 +40,6 @@ bool Sphere::IntersectDist(const Ray &ray, float &dist) const{
 	return hit;
 }
 
+Vec3 Sphere::NormalAt(const Vec3 &v) const{
+	return (v - pos).normalized();
+}

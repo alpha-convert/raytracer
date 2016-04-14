@@ -22,6 +22,7 @@ public:
 	Color c = Color::Red;
 
 	bool IntersectDist(const Ray &ray, float &dist) const;
+	Vec3 NormalAt(const Vec3 &p) const;
 
 	Sphere();
 	Sphere(Vec3 pos, float r);

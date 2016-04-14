@@ -14,6 +14,7 @@ enum ObjectType{
 class Object {
 public:
 	virtual bool IntersectDist(const Ray &, float &) const = 0;
+	virtual Vec3 NormalAt(const Vec3 &) const = 0;
 	const static ObjectType type;
 private:
 };
