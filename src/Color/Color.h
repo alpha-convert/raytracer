@@ -25,6 +25,8 @@ public:
 
 	bool operator==(const Color& c) const;
 
+	void AsHSV(uint32_t &h, uint32_t &s, uint32_t &l) const;
+	void SetHSV(const uint32_t &h, const uint32_t &s, const uint32_t &l);
 };
 
 

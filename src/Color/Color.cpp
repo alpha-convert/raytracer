@@ -5,6 +5,7 @@
  *      Author: Admin
  */
 
+#include <algorithm>
 #include "Color.h"
 #include "stdint.h"
 
@@ -24,3 +25,4 @@ const Color Color::White	= Color(255,255,255);
 bool Color::operator==(const Color& c) const{
 	return (r == c.r) && (g == c.g) && (b == c.b); 
 }
+
