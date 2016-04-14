@@ -19,6 +19,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <GLUT/glut.h>
+#include "settings.h"
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-1:-Bresenham%E2%80%99s-Line-Drawing-Algorithm
 
 
@@ -27,6 +28,20 @@ typedef struct Light{
 	float intensity;
 } Light;
 
+Ray ray_through_px(int x, int y, const Vec3 &camera_pos, const Vec3& screen_top_left){
+	Ray cast_ray;
+	cast_ray.orig = camera_pos;
+
+	auto px_vec = camera_pos * SGN(camera_pos.z) + screen_top_left;
+	px_vec.x += x;
+	px_vec.y -= y;
+	//Set and normalize the ray direction
+	cast_ray.dir = px_vec.normalized();
+	
+	return cast_ray;
+
+
+}
 
 //https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 int main(int argc, char** argv){
@@ -34,7 +49,7 @@ int main(int argc, char** argv){
 	(void) argv;
 
 
-	Graphics g = Graphics(1920/2,1080/2,"Window");
+	Graphics g = Graphics(1920,1080,"Window");
 	g.Clear();
 
 	Vec3 camera_pos = Vec3(0,0,-100);
@@ -63,7 +78,7 @@ int main(int argc, char** argv){
 
 	Light l0;
 	l0.pos = Vec3(20,80,10);
-	l0.intensity = 2000000;
+	l0.intensity = 200;
 
 	//For each pixel
 	for(int y = 0; y < g.height; ++y){
@@ -72,24 +87,15 @@ int main(int argc, char** argv){
 			for(const auto &object : scene){
 				
 				//construct a ray from the camera through the scrreen
-				Ray cast_ray;
-				cast_ray.orig = camera_pos;
-
-				//get a vector from the camera through the pixel
-				auto px_vec = camera_pos * SGN(camera_pos.z) + screen_top_left;
-				px_vec.x += x;
-				px_vec.y -= y;
-
-				//Set and normalize the ray direction
-				cast_ray.dir = px_vec.normalized();
+				Ray cast_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
 
 				float dist; //unfortunately, we have to use the ugly fill-out-param pattern
 				auto hit = object.IntersectDist(cast_ray,dist);
 
 				if(hit){
 					//Iterate over lights
-					auto intersection_point = cast_ray.orig + cast_ray.dir * dist;
-					auto normal = (intersection_point - object.pos).normalized();
+					auto intersection_point = cast_ray.Along(dist);
+					auto normal = object.NormalAt(intersection_point);
 					float intensity_factor = std::abs(l0.intensity/SQ(dist));
 					USE(intensity_factor);
 					USE(normal);
@@ -120,4 +126,6 @@ int main(int argc, char** argv){
 
 	SDL_Quit();
 }
+
+
 
