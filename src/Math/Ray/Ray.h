@@ -5,10 +5,14 @@
 * @Copyright WTFPL
 */
 #include "Math/Vec3/Vec3.h"
+#include "macros.h"
 class Ray {
 public:
 	Vec3 orig;
 	Vec3 dir;
+
+	static Ray ThroughPixel(int x, int y, const Vec3 &camera_pos, const Vec3& screen_top_left);
+	Vec3 Along(float dist);
 	Ray();
 	Ray(Vec3 orig, Vec3 dir);
 	virtual ~Ray(){};
