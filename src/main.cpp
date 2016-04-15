@@ -49,7 +49,7 @@ int main(int argc, char** argv){
 	(void) argv;
 
 
-	Graphics g = Graphics(1920,1080,"Window");
+	Graphics g = Graphics(1920/2,1080/2,"Window");
 	g.Clear();
 
 	Vec3 camera_pos = Vec3(0,0,-100);
@@ -61,7 +61,7 @@ int main(int argc, char** argv){
 	Sphere s0;
 	s0.pos = Vec3(-15,100,120);
 	s0.r = 120;
-	s0.c = Color(127,0,0);
+	s0.c = Color(1,0,0);
 	scene.push_back(s0);
 
 	Sphere s1;
@@ -69,6 +69,12 @@ int main(int argc, char** argv){
 	s1.r = 15;
 	s1.c = Color::Blue;
 	scene.push_back(s1);
+
+	Sphere s2;
+	s2.pos = Vec3(0,-30,0);
+	s2.r = 70;
+	s2.c = Color::Green;
+	scene.push_back(s2);
 
 	//might be the wrong way around;
 	//Z buffering
@@ -83,7 +89,6 @@ int main(int argc, char** argv){
 	//For each pixel
 	for(int y = 0; y < g.height; ++y){
 		for(int x = 0; x < g.width; ++x){
-			//for each object
 			for(const auto &object : scene){
 				
 				//construct a ray from the camera through the scrreen
@@ -100,11 +105,17 @@ int main(int argc, char** argv){
 					USE(intensity_factor);
 					USE(normal);
 
-					Color ambient = object.c;
-					ambient.r = CLAMP(ambient.r + intensity_factor,0,255);
+					auto diffuse_factor = normal.normalized().dot((cast_ray.dir + cast_ray.orig).normalized());
+					if(diffuse_factor < 0) diffuse_factor = 0;
+
+					assert(diffuse_factor >= 0);
+					assert(diffuse_factor <= 1.0);
+
+					Color diffuse = object.c;
+					diffuse = diffuse * diffuse_factor;
 
 
-					g.PutPixel(x,y,ambient);
+					g.PutPixel(x,y,diffuse);
 				}
 			}
 		}
@@ -126,6 +137,3 @@ int main(int argc, char** argv){
 
 	SDL_Quit();
 }
-
-
-
