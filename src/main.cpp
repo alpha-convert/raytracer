@@ -28,20 +28,6 @@ typedef struct Light{
 	float intensity;
 } Light;
 
-Ray ray_through_px(int x, int y, const Vec3 &camera_pos, const Vec3& screen_top_left){
-	Ray cast_ray;
-	cast_ray.orig = camera_pos;
-
-	auto px_vec = camera_pos * SGN(camera_pos.z) + screen_top_left;
-	px_vec.x += x;
-	px_vec.y -= y;
-	//Set and normalize the ray direction
-	cast_ray.dir = px_vec.normalized();
-	
-	return cast_ray;
-
-
-}
 
 //https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 int main(int argc, char** argv){
@@ -52,27 +38,27 @@ int main(int argc, char** argv){
 	Graphics g = Graphics(1920/2,1080/2,"Window");
 	g.Clear();
 
-	Vec3 camera_pos = Vec3(0,0,-100);
+	Vec3 camera_pos = Vec3(0,0,-500);
 	Vec3 screen_pos = Vec3(0,0,0);
 	Vec3 screen_top_left = screen_pos + Vec3(-static_cast<int>(g.width)/2,g.height/2,0);
 
 	std::vector<Sphere> scene;
 
 	Sphere s0;
-	s0.pos = Vec3(-15,100,120);
-	s0.r = 120;
+	s0.pos = Vec3(0,0,10);
+	s0.r = 30;
 	s0.c = Color(1,0,0);
 	scene.push_back(s0);
 
 	Sphere s1;
-	s1.pos = Vec3(70,50,30);
-	s1.r = 15;
+	s1.pos = Vec3(60,0,50);
+	s1.r = 30;
 	s1.c = Color::Blue;
 	scene.push_back(s1);
 
 	Sphere s2;
-	s2.pos = Vec3(0,-30,0);
-	s2.r = 70;
+	s2.pos = Vec3(-60,0,50);
+	s2.r = 30;
 	s2.c = Color::Green;
 	scene.push_back(s2);
 
@@ -89,35 +75,8 @@ int main(int argc, char** argv){
 	//For each pixel
 	for(int y = 0; y < g.height; ++y){
 		for(int x = 0; x < g.width; ++x){
-			for(const auto &object : scene){
-				
-				//construct a ray from the camera through the scrreen
-				Ray cast_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
-
-				float dist; //unfortunately, we have to use the ugly fill-out-param pattern
-				auto hit = object.IntersectDist(cast_ray,dist);
-
-				if(hit){
-					//Iterate over lights
-					auto intersection_point = cast_ray.Along(dist);
-					auto normal = object.NormalAt(intersection_point);
-					float intensity_factor = std::abs(l0.intensity/SQ(dist));
-					USE(intensity_factor);
-					USE(normal);
-
-					auto diffuse_factor = normal.normalized().dot((cast_ray.dir + cast_ray.orig).normalized());
-					if(diffuse_factor < 0) diffuse_factor = 0;
-
-					assert(diffuse_factor >= 0);
-					assert(diffuse_factor <= 1.0);
-
-					Color diffuse = object.c;
-					diffuse = diffuse * diffuse_factor;
-
-
-					g.PutPixel(x,y,diffuse);
-				}
-			}
+			Color final_color = g.Trace(x,y,scene,camera_pos,screen_top_left);
+			g.PutPixel(x,y,final_color);
 		}
 	}
 
@@ -137,3 +96,4 @@ int main(int argc, char** argv){
 
 	SDL_Quit();
 }
+
