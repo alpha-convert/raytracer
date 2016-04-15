@@ -100,15 +100,18 @@ Graphics::~Graphics() {
 }
 
 void Graphics::SetColor(const Color &c) const {
-	SDL_SetRenderDrawColor(this->renderer, c.r, c.g, c.b, 255);
+	assert(INRANGE(c.r,0,1));
+	assert(INRANGE(c.g,0,1));
+	assert(INRANGE(c.b,0,1));
+	SDL_SetRenderDrawColor(this->renderer, 255 * c.r, 255 * c.g, 255*c.b, 255);
 
 }
 
 Color Graphics::SDLColorToColor(uint32_t n) const{
 	Color c = Color(0,0,0);
-	c.r = n & 0xff000000;
-	c.g = n & 0xff0000;
-	c.b = n & 0xff00;
+	c.r = (n & 0xff000000) / 255.0f;
+	c.g = (n & 0xff0000) / 255.0f;
+	c.b = (n & 0xff00) / 255.0f;
 	return c;
 }
 
