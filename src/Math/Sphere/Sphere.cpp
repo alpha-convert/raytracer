@@ -20,7 +20,7 @@ bool wierd_quad_solve(const float a, const float b, const float c, float &x0, fl
 bool Sphere::IntersectDist(const Ray &ray, float &dist) const{
 	auto sphere = *this;
 	auto o = ray.orig;
-	auto l = ray.dir;
+	auto l = ray.dir.normalized();
 	auto x = sphere.pos;
 	auto r = sphere.r;
 
