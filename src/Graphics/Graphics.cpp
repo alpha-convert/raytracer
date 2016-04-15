@@ -206,16 +206,19 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const st
 }
 
 
-Color Graphics::Trace(int x, int y, const std::vector<Sphere> &scene, const Vec3& camera_pos, const Vec3 &screen_top_left) const{
+Color Graphics::Trace(int x, int y, const std::vector<Object *> &scene, const Vec3& camera_pos, const Vec3 &screen_top_left) const{
 	float closest_dist = std::numeric_limits<float>::infinity();
 	auto hit = false;
 	Color final_color = Color::White;
-	Sphere closest_object;
+	Object *closest_object;
+
+	//TODO: Ray through pixel might not work right...
+	//http://www.cs.virginia.edu/~gfx/Courses/2011/IntroGraphics/lectures/6-Ray%20Casting.pdf
 	Ray cast_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
 
 	for(const auto &object : scene){
 		float obj_dist;
-		auto hit_this = object.IntersectDist(cast_ray,obj_dist);
+		auto hit_this = object->IntersectDist(cast_ray,obj_dist);
 		if(obj_dist < closest_dist && hit_this){
 			hit = true;
 			closest_dist = obj_dist;
@@ -226,7 +229,7 @@ Color Graphics::Trace(int x, int y, const std::vector<Sphere> &scene, const Vec3
 	if(hit){
 		//Iterate over lights
 		auto intersection_point = cast_ray.Along(closest_dist);
-		auto normal = closest_object.NormalAt(intersection_point);
+		auto normal = closest_object->NormalAt(intersection_point);
 
 		auto diffuse_factor = normal.normalized().dot((cast_ray.dir + cast_ray.orig).normalized());
 		if(diffuse_factor < 0) diffuse_factor = 0;
@@ -234,7 +237,7 @@ Color Graphics::Trace(int x, int y, const std::vector<Sphere> &scene, const Vec3
 		assert(diffuse_factor >= 0);
 		assert(diffuse_factor <= 1.0);
 
-		Color diffuse = closest_object.c;
+		Color diffuse = closest_object->surface_color;
 		diffuse = diffuse * diffuse_factor;
 
 		final_color = diffuse;

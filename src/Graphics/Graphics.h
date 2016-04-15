@@ -107,7 +107,7 @@ class Graphics {
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
 		//TODO: change to general object ptr
-		Color Trace(int x, int y, const std::vector<Sphere> &scene, const Vec3& camera_pos, const Vec3 &screen_top_left) const;
+		Color Trace(int x, int y, const std::vector<Object *> &scene, const Vec3& camera_pos, const Vec3 &screen_top_left) const;
 
 		virtual ~Graphics();
 
