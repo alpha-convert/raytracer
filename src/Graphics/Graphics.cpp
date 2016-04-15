@@ -205,6 +205,44 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const st
 	}
 }
 
+
+Color Graphics::Trace(int x, int y, const std::vector<Sphere> &scene, const Vec3& camera_pos, const Vec3 &screen_top_left) const{
+	float closest_dist = std::numeric_limits<float>::infinity();
+	auto hit = false;
+	Color final_color = Color::White;
+	Sphere closest_object;
+	Ray cast_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
+
+	for(const auto &object : scene){
+		float obj_dist;
+		auto hit_this = object.IntersectDist(cast_ray,obj_dist);
+		if(obj_dist < closest_dist && hit_this){
+			hit = true;
+			closest_dist = obj_dist;
+			closest_object = object;
+		}
+	}
+
+	if(hit){
+		//Iterate over lights
+		auto intersection_point = cast_ray.Along(closest_dist);
+		auto normal = closest_object.NormalAt(intersection_point);
+
+		auto diffuse_factor = normal.normalized().dot((cast_ray.dir + cast_ray.orig).normalized());
+		if(diffuse_factor < 0) diffuse_factor = 0;
+
+		assert(diffuse_factor >= 0);
+		assert(diffuse_factor <= 1.0);
+
+		Color diffuse = closest_object.c;
+		diffuse = diffuse * diffuse_factor;
+
+		final_color = diffuse;
+	}
+	
+	return final_color;
+}
+
 ConventionalPoint::ConventionalPoint(int8_t x, int8_t y){
 	assert(INEQ(-1,<=,x,<=,1));
 	assert(INEQ(-1,<=,y,<=,1));

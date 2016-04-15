@@ -17,6 +17,8 @@
 #include "Math/Vec4/Vec4.h"
 #include "Math/Mat4/Mat4.h"
 #include "Color/Color.h"
+#include "Ray/Ray.h"
+#include "Sphere/Sphere.h"
 #include "Vertex/Vertex.h"
 #include "macros.h"
 
@@ -103,6 +105,9 @@ class Graphics {
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const;
 
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
+
+		//TODO: change to general object ptr
+		Color Trace(int x, int y, const std::vector<Sphere> &scene, const Vec3& camera_pos, const Vec3 &screen_top_left) const;
 
 		virtual ~Graphics();
 
