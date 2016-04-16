@@ -42,31 +42,25 @@ int main(int argc, char** argv){
 	Vec3 screen_pos = Vec3(0,0,0);
 	Vec3 screen_top_left = screen_pos + Vec3(-static_cast<int>(g.width)/2,g.height/2,0);
 
-	std::vector<Sphere> scene;
+	std::vector<Object *> scene;
 
 	Sphere s0;
-	s0.pos = Vec3(0,0,10);
-	s0.r = 30;
-	s0.c = Color(1,0,0);
-	scene.push_back(s0);
+	s0.pos = Vec3(-30,100,100);
+	s0.r = 70;
+	s0.surface_color = Color(1,0,0);
+	scene.push_back(&s0);
 
 	Sphere s1;
 	s1.pos = Vec3(60,0,50);
 	s1.r = 30;
-	s1.c = Color::Blue;
-	scene.push_back(s1);
+	s1.surface_color = Color::Blue;
+	scene.push_back(&s1);
 
 	Sphere s2;
 	s2.pos = Vec3(-60,0,50);
 	s2.r = 30;
-	s2.c = Color::Green;
-	scene.push_back(s2);
-
-	//might be the wrong way around;
-	//Z buffering
-	std::sort(scene.begin(),scene.end(),[](const Sphere &lhs, const Sphere &rhs){
-		return lhs.pos.z > rhs.pos.z;
-	});
+	s2.surface_color = Color::Green;
+	scene.push_back(&s2);
 
 	Light l0;
 	l0.pos = Vec3(20,80,10);
@@ -75,7 +69,8 @@ int main(int argc, char** argv){
 	//For each pixel
 	for(int y = 0; y < g.height; ++y){
 		for(int x = 0; x < g.width; ++x){
-			Color final_color = g.Trace(x,y,scene,camera_pos,screen_top_left);
+			Ray px_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
+			Color final_color = g.Trace(scene,px_ray);
 			g.PutPixel(x,y,final_color);
 		}
 	}

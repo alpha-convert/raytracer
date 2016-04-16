@@ -20,7 +20,7 @@ Ray Ray::ThroughPixel(int x, int y, const Vec3 &camera_pos, const Vec3& screen_t
 	return cast_ray;
 }
 
-Vec3 Ray::Along(float dist){
+Vec3 Ray::Along(float dist) const{
 	return orig + dir * dist;
 }
 

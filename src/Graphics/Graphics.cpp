@@ -206,15 +206,12 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const st
 }
 
 
-Color Graphics::Trace(int x, int y, const std::vector<Object *> &scene, const Vec3& camera_pos, const Vec3 &screen_top_left) const{
+
+Color Graphics::Trace(const std::vector<Object *> &scene, const Ray &cast_ray) const{
 	float closest_dist = std::numeric_limits<float>::infinity();
 	auto hit = false;
 	Color final_color = Color::White;
 	Object *closest_object;
-
-	//TODO: Ray through pixel might not work right...
-	//http://www.cs.virginia.edu/~gfx/Courses/2011/IntroGraphics/lectures/6-Ray%20Casting.pdf
-	Ray cast_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
 
 	for(const auto &object : scene){
 		float obj_dist;
