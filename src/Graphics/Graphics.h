@@ -106,8 +106,9 @@ class Graphics {
 
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
-		//TODO: change to general object ptr
-		Color Trace(const std::vector<Object *> &scene, const Ray &cast_ray) const; 
+		Color Trace(const std::vector<Object *> &scene, const Ray &cast_ray, unsigned recurse_times) const;
+
+		void AvgBlur(float ksize) const;
 
 		virtual ~Graphics();
 
@@ -115,7 +116,7 @@ class Graphics {
 		
 		SDL_Window *window;
 		SDL_Renderer *renderer;
-		uint32_t GetRawPixelFromSurface(uint32_t x, uint32_t y, const SDL_Surface* const surface);
+		uint32_t GetRawPixelFromSurface(uint32_t x, uint32_t y, const SDL_Surface* const surface) const;
 		Color SDLColorToColor(uint32_t n) const;
 
 };

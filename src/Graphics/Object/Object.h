@@ -9,7 +9,9 @@
 
 enum ObjectType{
 	type_sphere,
-	type_plane
+	type_plane,
+	type_light
+
 };
 
 class Object {

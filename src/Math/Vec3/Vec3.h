@@ -43,14 +43,28 @@ public:
 	///Magnitude (or size) of Vec3.
 	float mag() const;
 
+	///Sum of this and v
 	Vec3 operator+(const Vec3& v) const;
+	///Difference of this and v
 	Vec3 operator-(const Vec3& v) const;
+	///Scalar multiply this by f
 	Vec3 operator*(float f) const;
+	///Scalar divide this by f
 	Vec3 operator/(float f) const;
+	///The negative of this
 	Vec3 operator-() const;
 
+	/**
+	 * @brief Cast Vec3 to a Quat
+	 * @note w component of the Quat will be initialized to 0
+	 */
 	operator Quat() const;
+	///@brief Cast Vec3 to a Vec2 
 	operator Vec2() const;
+	/**
+	 * @brief Cast Vec3 to a Vec4
+	 * @note w component of Vec4 will be initialized to 1
+	 */
 	operator Vec4() const;
 
 	Vec3 normalized() const;
@@ -65,6 +79,7 @@ public:
 	Vec3 cross(const Vec3& v) const;
 	void crossInPlace(const Vec3& v);
 
+	///Return this rotated by Quat q
 	Vec3 rotate(const Quat& q) const;
 	
 

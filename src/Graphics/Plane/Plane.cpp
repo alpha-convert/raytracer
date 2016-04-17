@@ -1,6 +1,8 @@
 #include "Plane.h"
 bool Plane::IntersectDist(const Ray &ray, float &dist) const{
 	auto plane = *this;
+	//TODO: this obviously doesn't work
+	return false;
 }
 
 Vec3 Plane::NormalAt(const Vec3 & p) const{

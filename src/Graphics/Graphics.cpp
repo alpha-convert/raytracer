@@ -28,7 +28,7 @@ Graphics::Graphics(uint32_t width, uint32_t height, const char *name) {
 
 	this->window = SDL_CreateWindow(name,
 			SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height,
-			SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+			SDL_WINDOW_SHOWN);
 	if (!this->window) {
 		fprintf(stderr, "Error creating window, %s\n", SDL_GetError());
 	}
@@ -40,6 +40,9 @@ Graphics::Graphics(uint32_t width, uint32_t height, const char *name) {
 		fprintf(stderr,"Error creating renderer: %s", SDL_GetError());
 	}
 	assert(renderer!= nullptr);
+
+
+	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 
 
 }
@@ -207,10 +210,11 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const st
 
 
 
-Color Graphics::Trace(const std::vector<Object *> &scene, const Ray &cast_ray) const{
+Color Graphics::Trace(const std::vector<Object *> &scene, const Ray &cast_ray, unsigned recurse_times) const{
+	USE(recurse_times);
 	float closest_dist = std::numeric_limits<float>::infinity();
 	auto hit = false;
-	Color final_color = Color::White;
+	Color final_color = Color::Black;
 	Object *closest_object;
 
 	for(const auto &object : scene){
@@ -241,6 +245,45 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const Ray &cast_ray) c
 	}
 	
 	return final_color;
+}
+
+
+//TODO: make this work
+void Graphics::AvgBlur(float ksize) const{
+	SDL_RendererInfo info;
+	SDL_GetRendererInfo(renderer,&info);
+
+	auto render_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, 
+			    SDL_TEXTUREACCESS_STREAMING, width, height);
+
+	uint32_t format;
+	int *acc;
+	int *w;
+	int *h;
+	USE(w);
+	USE(h);
+	USE(ksize);
+	acc = w = h = nullptr;
+	SDL_QueryTexture(render_texture,&format,acc,w,h);
+	auto pitch = SDL_BITSPERPIXEL(format) * width / 8;
+
+	void *raw_pixel_data = malloc(width * height * sizeof(uint8_t) * pitch);
+	uint32_t *pixel_data = (uint32_t *) raw_pixel_data;
+	SDL_RenderReadPixels(renderer,NULL, format,raw_pixel_data,pitch);
+	USE(raw_pixel_data);
+	USE(pixel_data);
+
+	for(int y = 0; y < height; ++y){
+		for(int x = 0; x < width; ++x){
+			auto i = width * y + x;
+			USE(i);
+//			printf("%x\n",pixel_data[i]);
+
+		}
+	}
+	
+	free(raw_pixel_data);
+	
 }
 
 ConventionalPoint::ConventionalPoint(int8_t x, int8_t y){
