@@ -6,7 +6,7 @@ EXEC=$(notdir $(CURDIR))
 
 DOCS=docs
 
-INCLUDES=-I./src -I./src/math
+INCLUDES=-I./src -I./src/math -I./src/graphics
 
 LIBS=-framework SDL2 -framework OpenGL -framework GLUT /usr/local/lib/libGLEW.dylib
 
