@@ -210,11 +210,15 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const st
 
 
 
-Color Graphics::Trace(const std::vector<Object *> &scene, const Ray &cast_ray, unsigned recurse_times) const{
-	USE(recurse_times);
+Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Light> lights, const Ray &cast_ray, unsigned recurse_times) const{
 	float closest_dist = std::numeric_limits<float>::infinity();
 	auto hit = false;
 	Color final_color = Color::Black;
+
+	if(recurse_times >= 3){
+		return final_color;
+	}
+
 	Object *closest_object;
 
 	for(const auto &object : scene){
@@ -231,6 +235,13 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const Ray &cast_ray, u
 		//Iterate over lights
 		auto intersection_point = cast_ray.Along(closest_dist);
 		auto normal = closest_object->NormalAt(intersection_point);
+
+		//bounce ray might not work right.
+		//also recursion.
+		Ray bounce_ray;
+		bounce_ray.orig = intersection_point;
+		bounce_ray.dir = cast_ray.dir - normal * 2*(cast_ray.dir.dot(normal));
+		auto bounce_color = Trace(scene,lights,bounce_ray,recurse_times + 1);
 
 		auto diffuse_factor = normal.normalized().dot((cast_ray.dir + cast_ray.orig).normalized());
 		if(diffuse_factor < 0) diffuse_factor = 0;

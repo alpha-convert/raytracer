@@ -20,9 +20,12 @@ class Light{
 public:
 	Vec3 pos;
 	Color emit_color;
-	Light();
-	~Light();
-
+	///Range: [0,1]
+	float intensity_factor;
+	Light(const Vec3 &p);
+	Light(const Vec3 &p, const Color& c);
+	Light(const Vec3 &p, const Color& c, float f);
+	~Light(){};
 
 private:
 };

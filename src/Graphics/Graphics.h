@@ -17,6 +17,7 @@
 #include "Math/Vec4/Vec4.h"
 #include "Math/Mat4/Mat4.h"
 #include "Color/Color.h"
+#include "Light/Light.h"
 #include "Ray/Ray.h"
 #include "Sphere/Sphere.h"
 #include "Vertex/Vertex.h"
@@ -106,7 +107,7 @@ class Graphics {
 
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
-		Color Trace(const std::vector<Object *> &scene, const Ray &cast_ray, unsigned recurse_times) const;
+		Color Trace(const std::vector<Object *> &scene, const std::vector<Light>, const Ray &cast_ray, unsigned recurse_times) const;
 
 		void AvgBlur(float ksize) const;
 
