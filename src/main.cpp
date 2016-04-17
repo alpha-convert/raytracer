@@ -13,20 +13,15 @@
 #include "Math/Ray/Ray.h"
 #include "Math/Tree/Tree.h"
 #include "Graphics/Graphics.h"
-#include "Math/Sphere/Sphere.h"
-#include "Math/Object/Object.h"
+#include "Sphere/Sphere.h"
+#include "Object/Object.h"
+#include "Light/Light.h"
 #include "OpenGL/OpenGL.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <GLUT/glut.h>
 #include "settings.h"
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-1:-Bresenham%E2%80%99s-Line-Drawing-Algorithm
-
-
-typedef struct Light{
-	Vec3 pos;
-	float intensity;
-} Light;
 
 
 //https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
@@ -43,6 +38,7 @@ int main(int argc, char** argv){
 	Vec3 screen_top_left = screen_pos + Vec3(-static_cast<int>(g.width)/2,g.height/2,0);
 
 	std::vector<Object *> scene;
+	std::vector<Light> lights;
 
 	Sphere s0;
 	s0.pos = Vec3(-30,100,100);
@@ -62,15 +58,14 @@ int main(int argc, char** argv){
 	s2.surface_color = Color::Green;
 	scene.push_back(&s2);
 
-	Light l0;
-	l0.pos = Vec3(20,80,10);
-	l0.intensity = 200;
+	Light l0 = Light(Vec3(20,80,10));
+	lights.push_back(l0);
 
 	//For each pixel
 	for(int y = 0; y < g.height; ++y){
 		for(int x = 0; x < g.width; ++x){
 			Ray px_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
-			Color final_color = g.Trace(scene,px_ray);
+			Color final_color = g.Trace(scene,lights,px_ray,0);
 			g.PutPixel(x,y,final_color);
 		}
 	}
