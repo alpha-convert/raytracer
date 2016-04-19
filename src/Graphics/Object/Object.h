@@ -21,5 +21,10 @@ public:
 	const static ObjectType type;
 	Color surface_color;
 
+	float ks;
+	float kd;
+	float ka;
+	float alpha;
+
 private:
 };

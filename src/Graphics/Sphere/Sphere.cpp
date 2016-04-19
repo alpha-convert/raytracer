@@ -2,10 +2,20 @@
 
 Sphere::Sphere(){
 	this->pos = Vec3(0,0,0);
-	this->r = 0;
+	this->r = 0.1;
+
+	ks = 1;
+	kd = 1;
+	ka = 0.3;
+	alpha = 5;
 }
 
-Sphere::Sphere(Vec3 pos, float r) : pos(pos), r(r){}
+Sphere::Sphere(Vec3 pos, float r) : pos(pos), r(r){
+	ks = 1;
+	kd = 1;
+	ka = 0.3;
+	alpha = 5;
+}
 
 bool wierd_quad_solve(const float a, const float b, const float c, float &x0, float &x1){
 	auto discr = SQ(b) - a*c;
