@@ -107,7 +107,10 @@ class Graphics {
 
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
+		Color Trace(const std::vector<Object *> &scene, const std::vector<Light> lights, const Ray &cast_ray, const Vec3 &camera_pos,unsigned recurse_times) const;
 		Color Trace(const std::vector<Object *> &scene, const std::vector<Light>, const Ray &cast_ray, unsigned recurse_times) const;
+		Object* GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray, float &dist) const;
+		Object* GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray) const;
 
 		void AvgBlur(float ksize) const;
 

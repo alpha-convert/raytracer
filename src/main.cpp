@@ -41,31 +41,45 @@ int main(int argc, char** argv){
 	std::vector<Light> lights;
 
 	Sphere s0;
-	s0.pos = Vec3(-30,100,100);
+	s0.pos = Vec3(-150,0,100);
 	s0.r = 70;
 	s0.surface_color = Color(1,0,0);
+	s0.ks = 0.5;
+	s0.kd = 0.5;
+	s0.ka = 0.3;
+
 	scene.push_back(&s0);
 
 	Sphere s1;
-	s1.pos = Vec3(60,0,50);
-	s1.r = 30;
+	s1.pos = Vec3(0,0,100);
+	s1.r = 70;
 	s1.surface_color = Color::Blue;
+	s1.ks = 0.5;
+	s1.kd = 0.5;
+	s1.ka = 0.3;
 	scene.push_back(&s1);
 
 	Sphere s2;
-	s2.pos = Vec3(-60,0,50);
-	s2.r = 30;
+	s2.pos = Vec3(170,0,100);
+	s2.r = 100;
 	s2.surface_color = Color::Green;
+	s2.ks = 0.5;
+	s2.kd = 0.5;
+	s2.ka = 0.7;
+
 	scene.push_back(&s2);
 
-	Light l0 = Light(Vec3(20,80,10));
+	Light l0 = Light(-Vec3(0,500,-500));
 	lights.push_back(l0);
+
+	Light l1 = Light(-Vec3(50000,300,-50));
+//	lights.push_back(l0);
 
 	//For each pixel
 	for(int y = 0; y < g.height; ++y){
 		for(int x = 0; x < g.width; ++x){
 			Ray px_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
-			Color final_color = g.Trace(scene,lights,px_ray,0);
+			Color final_color = g.Trace(scene,lights,px_ray,camera_pos,0);
 			g.PutPixel(x,y,final_color);
 		}
 	}

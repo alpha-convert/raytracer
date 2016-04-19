@@ -208,55 +208,114 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const st
 	}
 }
 
+Object *Graphics::GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray, float &dist) const{
+	Object *closest_object = NULL;
+	dist = std::numeric_limits<float>::infinity();
+	for(const auto &object : objects){
+		float obj_dist;
+		auto hit_this = object->IntersectDist(cast_ray,obj_dist);
+		if(obj_dist < dist && hit_this){
+			dist = obj_dist;
+			closest_object = object;
+		}
+	}
+	return closest_object;
+
+}
+
+Object *Graphics::GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray) const{
+	float dist = std::numeric_limits<float>::infinity();
+	Object *closest_object = NULL;
+	for(const auto &object : objects){
+		float obj_dist;
+		auto hit_this = object->IntersectDist(cast_ray,obj_dist);
+		if(obj_dist < dist && hit_this){
+			dist = obj_dist;
+			closest_object = object;
+		}
+	}
+	return closest_object;
+
+}
 
 
-Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Light> lights, const Ray &cast_ray, unsigned recurse_times) const{
+Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Light> lights, const Ray &cast_ray, const Vec3 &camera_pos,unsigned recurse_times) const{
+	//general init stuff
 	float closest_dist = std::numeric_limits<float>::infinity();
 	auto hit = false;
-	Color final_color = Color::Black;
+	Color final_color = Color::White;
 
+	//base case
 	if(recurse_times >= 3){
 		return final_color;
 	}
 
-	Object *closest_object;
+	//Find the closest object
+	Object *closest_object = GetClosestObject(scene,cast_ray,closest_dist);
+	hit = closest_object ? true : false;
 
-	for(const auto &object : scene){
-		float obj_dist;
-		auto hit_this = object->IntersectDist(cast_ray,obj_dist);
-		if(obj_dist < closest_dist && hit_this){
-			hit = true;
-			closest_dist = obj_dist;
-			closest_object = object;
-		}
-	}
+	assert(IMPLIES(hit,closest_object));
+	assert(IMPLIES(closest_dist == std::numeric_limits<float>::infinity(),!hit));
+	
 
 	if(hit){
+		Color ambient = closest_object->surface_color;
+		final_color = ambient * closest_object->ka;
 		//Iterate over lights
-		auto intersection_point = cast_ray.Along(closest_dist);
-		auto normal = closest_object->NormalAt(intersection_point);
+		Vec3 intersection_point = cast_ray.Along(closest_dist);
+		Vec3 normal = closest_object->NormalAt(intersection_point);
 
-		//bounce ray might not work right.
-		//also recursion.
+		//create the bounce ray
 		Ray bounce_ray;
 		bounce_ray.orig = intersection_point;
 		bounce_ray.dir = cast_ray.dir - normal * 2*(cast_ray.dir.dot(normal));
-		auto bounce_color = Trace(scene,lights,bounce_ray,recurse_times + 1);
 
-		auto diffuse_factor = normal.normalized().dot((cast_ray.dir + cast_ray.orig).normalized());
-		if(diffuse_factor < 0) diffuse_factor = 0;
+		//go over each light
+		for(const auto &l : lights){
+			float light_intersect_dist = (intersection_point - l.pos).mag();
+			USE(light_intersect_dist);
 
-		assert(diffuse_factor >= 0);
-		assert(diffuse_factor <= 1.0);
+			//make a ray from from the light to the sphere
+			Ray light_check_ray;
+			light_check_ray.orig = l.test_sphere.pos;
+			light_check_ray.dir = (l.test_sphere.pos - intersection_point).normalized();
 
-		Color diffuse = closest_object->surface_color;
-		diffuse = diffuse * diffuse_factor;
+			float light_check_dist;
+			Object *closest_to_light = GetClosestObject(scene,light_check_ray,light_check_dist);
+			USE(closest_to_light);
 
-		final_color = diffuse;
+			auto light_check_point = light_check_ray.orig + light_check_ray.dir * light_check_dist;
+
+			if(light_check_point == intersection_point){
+				Vec3 Lm = (light_check_point-l.pos).normalized();
+				Vec3 N = normal.normalized();
+				Vec3 Rm = N*2*(Lm.dot(N)) - Lm;
+				Vec3 V = (camera_pos - intersection_point).normalized();
+				float alpha = closest_to_light->alpha;
+
+				float ks = closest_to_light->ks;
+				Color is = l.is;
+				Color specular_term = is * ks * std::pow(std::max<float>(Rm.dot(V),0),alpha);
+				assert(0<=specular_term.r<=1);
+				assert(0<=specular_term.g<=1);
+				assert(0<=specular_term.b<=1);
+
+				float kd = closest_to_light->kd;
+				Color id = l.id;
+				Color diffuse_term = id * kd * std::max<float>(Lm.dot(N),0);
+				assert(0<=diffuse_term.r<=1);
+				assert(0<=diffuse_term.g<=1);
+				assert(0<=diffuse_term.b<=1);
+
+				Color reflection_term = Trace(scene,lights,light_check_ray,camera_pos,recurse_times+1) * ks;
+
+				final_color = final_color + diffuse_term + specular_term;
+			}
+		}
 	}
-	
 	return final_color;
 }
+
 
 
 //TODO: make this work
@@ -294,7 +353,6 @@ void Graphics::AvgBlur(float ksize) const{
 	}
 	
 	free(raw_pixel_data);
-	
 }
 
 ConventionalPoint::ConventionalPoint(int8_t x, int8_t y){
