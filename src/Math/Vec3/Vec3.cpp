@@ -2,6 +2,7 @@
 #include "Quat/Quat.h"
 #include "Vec2/Vec2.h"
 #include "Vec4/Vec4.h"
+#include "macros.h"
 #include <cmath>
 #include <cassert>
 
@@ -49,6 +50,14 @@ Vec3::operator Vec2() const{
 
 Vec3::operator Vec4() const{
 	return Vec4(x,y,z,1);
+}
+
+
+bool Vec3::operator==(const Vec3& v) const{
+	auto xeq = FLEQUALTOL(x,v.x,0.1);
+	auto yeq = FLEQUALTOL(y,v.y,0.1);
+		auto zeq = FLEQUALTOL(z,v.z,0.1);
+	return xeq && yeq && zeq;
 }
 
 Vec3 Vec3::normalized() const{

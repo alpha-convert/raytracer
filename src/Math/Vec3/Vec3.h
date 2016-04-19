@@ -53,6 +53,7 @@ public:
 	Vec3 operator/(float f) const;
 	///The negative of this
 	Vec3 operator-() const;
+	bool operator==(const Vec3 &v) const;
 
 	/**
 	 * @brief Cast Vec3 to a Quat
@@ -81,7 +82,6 @@ public:
 
 	///Return this rotated by Quat q
 	Vec3 rotate(const Quat& q) const;
-	
 
 };
 
