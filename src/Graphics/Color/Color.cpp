@@ -28,12 +28,21 @@ bool Color::operator==(const Color& c) const{
 }
 
 Color Color::operator*(float f) const{
-	return Color(f*r,f*g,f*b);
+	return Color(f*r,f*g,f*b).clamped();
 }
 Color Color::operator/(float f) const{
-	return Color(r/f,g/f,b/f);
+	return Color(r/f,g/f,b/f).clamped();
 }
 
+Color Color::operator+(const Color &c) const{
+	return Color(r+c.r,g+c.g,b+c.b).clamped();
+}
+
+Color Color::clamped(){
+	auto c = *this;
+	c.clamp();
+	return c;
+}
 
 void Color::clamp(){
 	r = CLAMP(r,0.0,1.0);
