@@ -7,7 +7,7 @@ Sphere::Sphere(){
 	ks = 1;
 	kd = 1;
 	ka = 0.3;
-	alpha = 5;
+	alpha = 30;
 }
 
 Sphere::Sphere(Vec3 pos, float r) : pos(pos), r(r){
