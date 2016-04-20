@@ -7,7 +7,7 @@ Ray::Ray(){
 Ray::Ray(Vec3 orig, Vec3 dir) : orig(orig), dir(dir){}
 
 
-Ray Ray::ThroughPixel(int x, int y, const Vec3 &camera_pos, const Vec3& screen_top_left){
+Ray Ray::ThroughPixel(float x, float y, const Vec3 &camera_pos, const Vec3& screen_top_left){
 	Ray cast_ray;
 	cast_ray.orig = camera_pos;
 

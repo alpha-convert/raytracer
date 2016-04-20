@@ -11,7 +11,7 @@ public:
 	Vec3 orig;
 	Vec3 dir;
 
-	static Ray ThroughPixel(int x, int y, const Vec3 &camera_pos, const Vec3& screen_top_left);
+	static Ray ThroughPixel(float x, float y, const Vec3 &camera_pos, const Vec3& screen_top_left);
 	Vec3 Along(float dist) const;
 	Ray();
 	Ray(Vec3 orig, Vec3 dir);
