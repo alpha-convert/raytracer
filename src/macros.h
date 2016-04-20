@@ -6,11 +6,10 @@
 #define DEG(x)						(x*M_PI/180)
 #define RAD(x)						(x/M_PI*180)
 #define FLEQUAL(a,b) 				(std::abs(a - b) < 0.001)
+#define FLEQUALTOL(a,b,t) 			(std::abs(a - b) < t)
 #define USE(x)						((void) x)
 #define INRANGE(x,low,high)			INEQ(low,<=,x,<=,high)
 #define UNITLENGTH(x)				(FLEQUAL(x.mag(),1.0f))
-
-#define P_VEC3(v)	do{ \
-	printf("%s: %.3f,%.3f,%.3f\n",VNAME(v),v.x,v.y,v.z); \
-} while(0);
-
+#define IMPLIES(x,y)				(!(x) || y)
+#define	_BV(x)						(1 << x)
+#define P_VEC3(v)					do{printf("%s: %.3f,%.3f,%.3f\n",VNAME(v),v.x,v.y,v.z);}while(0);
