@@ -32,6 +32,9 @@ public:
 	Color operator/(float f) const;
 	Color operator+(const Color &c) const;
 
+	Color UnclampedAdd(const Color &c) const;
+	Color UnclampedMult(float f) const;
+
 	void clamp();
 	Color clamped();
 

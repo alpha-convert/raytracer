@@ -38,6 +38,16 @@ Color Color::operator+(const Color &c) const{
 	return Color(r+c.r,g+c.g,b+c.b).clamped();
 }
 
+Color Color::UnclampedAdd(const Color &c) const{
+	return Color(r+c.r,g+c.g,b+c.b);
+}
+
+Color Color::UnclampedMult(float f) const{
+	return Color(f*r,f*g,f*b);
+}
+
+
+
 Color Color::clamped(){
 	auto c = *this;
 	c.clamp();
