@@ -62,8 +62,12 @@ class Graphics {
 		 * While very powerful and more user-friendly than OpenGL or D3D, SDL still requires some verbose and tedious setup before you can get to the good stuff.
 		 * One of the goals of this class is to provide a one line way to safely allocate all nessicary resources and display the window. This takes advantage of C++'s wonderful RAII philosophy.
 		 * This also means that the user of this class doesn't need to worry about destroy resources and memory after the window closes. All allocated memory is freed in the constructor.
+		 *
+		 * @param width Width of the window that is opened when this object is constructed
+		 * @param height Height of the window that is opened when this object is constructed
+		 * @param name Title of the window
 		 */
-		Graphics(uint32_t width, uint32_t height, const char *);
+		Graphics(uint32_t width, uint32_t height, const char *name);
 
 		/**
 		 * @brief Updates the window with the drawings created since the last update (or construction)
@@ -77,11 +81,17 @@ class Graphics {
 
 		/**
 		 * @brief Draw line such that (0,0) is the center of the screen
+		 * @param x1 x component of endpoint 1
+		 * @param y1 y component of endpoint 1
+		 * @param x2 x component of endpoint 2
+		 * @param y2 y component of endpoint 2
 		 */
 		void SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
 
 		/**
 		 * @brief Draw a Vec3 to the screen from the origin.
+		 * @param v endpoint of the line
+		 * @param scalar scaling factor of the line. Unit vectors may be mard to see, so passing a larger number here will make it easier to see
 		 */
 		void ProjectVec3(const Vec3 &v, const Color &c, int32_t scalar = 1) const;
 
@@ -107,6 +117,9 @@ class Graphics {
 
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
+		/**
+		 * I hate this pattern, but we have to use it.
+		 */
 		Color Trace(const std::vector<Object *> &scene, const std::vector<Light> lights, const Ray &cast_ray, const Vec3 &camera_pos,unsigned recurse_times) const;
 		Color Trace(const std::vector<Object *> &scene, const std::vector<Light>, const Ray &cast_ray, unsigned recurse_times) const;
 		Object* GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray, float &dist) const;

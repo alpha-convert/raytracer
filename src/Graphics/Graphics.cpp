@@ -95,8 +95,7 @@ void Graphics::PutPixel(int x, int y, const Color &c) const {
 }
 
 Graphics::~Graphics() {
-	// TODO Auto-generated destructor stub
-	//	SDL_FreeSurface(surface);
+
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(this->renderer);
 	SDL_Quit();
@@ -307,9 +306,9 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 				assert(0<=diffuse_term.g<=1);
 				assert(0<=diffuse_term.b<=1);
 
-				Color reflection_term = Trace(scene,lights,light_check_ray,camera_pos,recurse_times+1) * ks;
+				Color reflection_term = Trace(scene,lights,light_check_ray,camera_pos,recurse_times+1) * 0.1;
 
-				final_color = final_color + diffuse_term + specular_term;
+				final_color = (final_color + diffuse_term + specular_term);
 			}
 		}
 	}
