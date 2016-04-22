@@ -2,7 +2,7 @@
 Light::Light(const Vec3 &p){
 	pos = p;
 	test_sphere.pos = p;
-	test_sphere.r = 0.01f;
+	test_sphere.r = 10;
 	is = Color::White;
 	id = Color::White;
 }
@@ -21,6 +21,7 @@ Light::Light(const json &j){
 	id.g = j["id"]["g"];
 	id.b = j["id"]["b"];
 	test_sphere.pos = pos;
-	test_sphere.r = 0.001;
+	test_sphere.r = 10;
+	test_sphere.surface_color = Color::Green;
 }
 

@@ -11,8 +11,8 @@
 enum ObjectType{
 	type_sphere,
 	type_plane,
-	type_light
-
+	type_light,
+	type_triangle
 };
 
 using json = nlohmann::json;

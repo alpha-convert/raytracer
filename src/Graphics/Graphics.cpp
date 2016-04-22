@@ -102,9 +102,9 @@ Graphics::~Graphics() {
 }
 
 void Graphics::SetColor(const Color &c) const {
-	assert(INRANGE(c.r,0,1));
-	assert(INRANGE(c.g,0,1));
-	assert(INRANGE(c.b,0,1));
+	//assert(INRANGE(c.r,0,1));
+	//assert(INRANGE(c.g,0,1));
+	//assert(INRANGE(c.b,0,1));
 	SDL_SetRenderDrawColor(this->renderer, 255 * c.r, 255 * c.g, 255*c.b, 255);
 
 }
