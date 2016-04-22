@@ -6,6 +6,7 @@
 */
 #include "Ray/Ray.h"
 #include "Color/Color.h"
+#include "json/json.hpp"
 
 enum ObjectType{
 	type_sphere,
@@ -14,8 +15,12 @@ enum ObjectType{
 
 };
 
+using json = nlohmann::json;
+
 class Object {
 public:
+	Object(const json &data);
+	Object(){};
 	virtual bool IntersectDist(const Ray &, float &) const = 0;
 	virtual Vec3 NormalAt(const Vec3 &) const = 0;
 	const static ObjectType type;
