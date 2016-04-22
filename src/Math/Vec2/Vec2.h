@@ -9,13 +9,19 @@ class Vec3;
 class Quat;
 #endif
 
+/***
+* @Author Joseph Cutler
+* @Copyright WTFPL
+*/
 class Vec2{
 public:
-	float x,y;
+	/** x component of Vec2*/
+	float x;
+	/** y component of Vec2*/
+	float y;
 
 	Vec2();
 	Vec2(float,float);
-
 
 	static const Vec2 I;
 	static const Vec2 J;
