@@ -34,8 +34,6 @@ void read_entire_json_file(const std::string &fname, json &contents){
 	ifs >> contents;
 }
 
-
-
 int main(int argc, char** argv){
 	(void) argc;
 	(void) argv;
@@ -62,7 +60,6 @@ int main(int argc, char** argv){
 	std::vector<Light> lights;
 
 	for(const auto &o : json_scene["objects"]){
-		std::cout << o << std::endl;
 		if(o["type"] == "type_sphere"){
 			scene.push_back(new Sphere(o));
 		} else if(o["type"] == "type_plane"){
@@ -71,8 +68,12 @@ int main(int argc, char** argv){
 	}
 
 	for(const auto &l : json_scene["lights"]){
-		std::cout << l << std::endl;
-		lights.push_back(Light(l));
+		Light nl = Light(l);
+		lights.push_back(nl);
+		Sphere *s = new Sphere();
+		*s = nl.test_sphere;
+		scene.push_back(s);
+
 	}
 
 	//For each pixel
@@ -107,11 +108,12 @@ int main(int argc, char** argv){
 				running = false;
 			}
 		}
-		
+
 	}
-	//TODO: memory leak?
-	for(auto &o : scene){
-		delete o;
+
+	for(auto &a:scene){
+		delete a;
 	}
+
 	SDL_Quit();
 }
