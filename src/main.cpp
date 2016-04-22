@@ -1,3 +1,5 @@
+#include <fstream>
+#include <streambuf>
 #include <cmath>
 #include <array>
 #include <cstdio>
@@ -14,6 +16,7 @@
 #include "Math/Tree/Tree.h"
 #include "Graphics/Graphics.h"
 #include "Sphere/Sphere.h"
+#include "Plane/Plane.h"
 #include "Object/Object.h"
 #include "Light/Light.h"
 #include "OpenGL/OpenGL.h"
@@ -21,65 +24,74 @@
 #include <SDL2/SDL_opengl.h>
 #include <GLUT/glut.h>
 #include "settings.h"
-//https://github.com/ssloy/tinyrenderer/wiki/Lesson-1:-Bresenham%E2%80%99s-Line-Drawing-Algorithm
+#include "json/json.hpp"
+
+#define SUBPIXEL 1
+using json = nlohmann::json;
+
+void read_entire_json_file(const std::string &fname, json &contents){
+	std::ifstream ifs (fname,std::ifstream::in);
+	ifs >> contents;
+}
 
 
-//https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
+
 int main(int argc, char** argv){
 	(void) argc;
 	(void) argv;
 
+	json json_scene;
+	read_entire_json_file("scene.json",json_scene);
 
-	Graphics g = Graphics(1920/2,1080/2,"Window");
+
+	Graphics g = Graphics(1920/2,1080/2,"Raytracer");
 	g.Clear();
 
-	Vec3 camera_pos = Vec3(0,0,-500);
-	Vec3 screen_pos = Vec3(0,0,0);
-	Vec3 screen_top_left = screen_pos + Vec3(-static_cast<int>(g.width)/2,g.height/2,0);
+	//this doesn't really work but it's a start
+	float scene_angle = -M_PI/2;
+	float camera_dist = 1500;
+	float screen_dist = 300;
+
+	Vec3 camera_pos = Vec3(camera_dist * cos(scene_angle),0,camera_dist * sin(scene_angle));
+	Vec3 screen_pos = Vec3(screen_dist * cos(scene_angle),0,screen_dist * sin(scene_angle));
+	Vec3 screen_normal = (camera_pos - screen_pos).normalized();
+	Vec3 screen_top_left = screen_pos + Vec3(-static_cast<float>(g.width)/2,static_cast<float>(g.height)/2,0);
+	USE(screen_normal);
 
 	std::vector<Object *> scene;
 	std::vector<Light> lights;
 
-	Sphere s0;
-	s0.pos = Vec3(-150,0,100);
-	s0.r = 70;
-	s0.surface_color = Color(1,0,0);
-	s0.ks = 0.5;
-	s0.kd = 0.5;
-	s0.ka = 0.3;
+	for(const auto &o : json_scene["objects"]){
+		std::cout << o << std::endl;
+		if(o["type"] == "type_sphere"){
+			scene.push_back(new Sphere(o));
+		} else if(o["type"] == "type_plane"){
+			scene.push_back(new Plane(o));
+		}
+	}
 
-	scene.push_back(&s0);
-
-	Sphere s1;
-	s1.pos = Vec3(0,0,100);
-	s1.r = 70;
-	s1.surface_color = Color::Blue;
-	s1.ks = 0.5;
-	s1.kd = 0.5;
-	s1.ka = 0.3;
-	scene.push_back(&s1);
-
-	Sphere s2;
-	s2.pos = Vec3(170,0,100);
-	s2.r = 100;
-	s2.surface_color = Color::Green;
-	s2.ks = 0.5;
-	s2.kd = 0.5;
-	s2.ka = 0.7;
-
-	scene.push_back(&s2);
-
-	Light l0 = Light(-Vec3(0,500,-500));
-	lights.push_back(l0);
-
-	Light l1 = Light(-Vec3(50000,300,-50));
-//	lights.push_back(l0);
+	for(const auto &l : json_scene["lights"]){
+		std::cout << l << std::endl;
+		lights.push_back(Light(l));
+	}
 
 	//For each pixel
 	for(int y = 0; y < g.height; ++y){
 		for(int x = 0; x < g.width; ++x){
+#if SUBPIXEL
+			Ray px_ray0 = Ray::ThroughPixel(x-0.5,y,camera_pos,screen_top_left);
+			Ray px_ray1 = Ray::ThroughPixel(x,y-0.5,camera_pos,screen_top_left);
+			Ray px_ray2 = Ray::ThroughPixel(x-0.5,y-0.5,camera_pos,screen_top_left);
+			Ray px_ray3 = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
+			Color c0 = g.Trace(scene,lights,px_ray0,camera_pos,0);
+			Color c1 = g.Trace(scene,lights,px_ray1,camera_pos,0);
+			Color c2 = g.Trace(scene,lights,px_ray2,camera_pos,0);
+			Color c3 = g.Trace(scene,lights,px_ray3,camera_pos,0);
+			Color final_color = c0.UnclampedAdd(c1).UnclampedAdd(c2).UnclampedAdd(c3) * (0.25);
+#else
 			Ray px_ray = Ray::ThroughPixel(x,y,camera_pos,screen_top_left);
 			Color final_color = g.Trace(scene,lights,px_ray,camera_pos,0);
+#endif
 			g.PutPixel(x,y,final_color);
 		}
 	}
@@ -97,7 +109,9 @@ int main(int argc, char** argv){
 		}
 		
 	}
-
+	//TODO: memory leak?
+	for(auto &o : scene){
+		delete o;
+	}
 	SDL_Quit();
 }
-
