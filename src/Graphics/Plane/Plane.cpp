@@ -4,7 +4,7 @@
 bool Plane::IntersectDist(const Ray &ray, float &dist) const{
 	bool hit = false;
 	Vec3 Pr = ray.orig;
-	Vec3 P0 = p;
+	Vec3 P0 = pos;
 	Vec3 n = normal;
 	Vec3 ur = ray.dir;
 
@@ -23,9 +23,26 @@ Vec3 Plane::NormalAt(const Vec3 & p) const{
 	return normal;
 }
 
+Plane::Plane(const json &j){
+	pos.x = j["pos"]["x"];
+	pos.y = j["pos"]["y"];
+	pos.z = j["pos"]["z"];
+	normal.x = j["normal"]["x"];
+	normal.y = j["normal"]["y"];
+	normal.z = j["normal"]["z"];
+	surface_color.r = j["surface_color"]["r"];
+	surface_color.g = j["surface_color"]["g"];
+	surface_color.b = j["surface_color"]["b"];
+	ks = j["blinn"]["ks"];
+	kd = j["blinn"]["kd"];
+	ka = j["blinn"]["ka"];
+	alpha = j["blinn"]["alpha"];
+	
+}
+
 Plane::Plane(){
 	auto i = -std::numeric_limits<float>::infinity();
-	p = Vec3(i,i,i);
+	pos = Vec3(i,i,i);
 	normal = Vec3(0,0,-1); //must be unit length or something will go horribly wrong
 
 	ks = 0.2;
@@ -34,7 +51,7 @@ Plane::Plane(){
 	alpha = 2;
 }
 
-Plane::Plane(Vec3 &p, Vec3& normal) : p(p){
+Plane::Plane(Vec3 &p, Vec3& normal) : pos(p){
 	assert(UNITLENGTH(normal));
 	this->normal = normal;
 

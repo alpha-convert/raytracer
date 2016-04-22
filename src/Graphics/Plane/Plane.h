@@ -17,13 +17,14 @@
 
 class Plane : public Object{
 public:
-	Vec3 p;
+	Vec3 pos;
 	Vec3 normal;
 
 	bool IntersectDist(const Ray &ray, float &dist) const;
 	Vec3 NormalAt(const Vec3 &p) const;
 	const static ObjectType type = ObjectType::type_plane;
 
+	Plane(const json &data);
 	Plane();
 	Plane(Vec3 &p, Vec3& normal);
 	virtual ~Plane(){};
