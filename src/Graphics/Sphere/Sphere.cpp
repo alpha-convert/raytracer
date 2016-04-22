@@ -2,19 +2,29 @@
 
 Sphere::Sphere(){
 	this->pos = Vec3(0,0,0);
-	this->r = 0.1;
+	this->r = 0;
+}
 
-	ks = 1;
-	kd = 1;
-	ka = 0.3;
-	alpha = 30;
+Sphere::Sphere(const json &j){
+	pos.x = j["pos"]["x"];
+	pos.y = j["pos"]["y"];
+	pos.z = j["pos"]["z"];
+	r = j["r"];
+	surface_color.r = j["surface_color"]["r"];
+	surface_color.g = j["surface_color"]["g"];
+	surface_color.b = j["surface_color"]["b"];
+	ks = j["blinn"]["ks"];
+	kd = j["blinn"]["kd"];
+	ka = j["blinn"]["ka"];
+	alpha = j["blinn"]["alpha"];
+
 }
 
 Sphere::Sphere(Vec3 pos, float r) : pos(pos), r(r){
-	ks = 1;
-	kd = 1;
-	ka = 0.3;
-	alpha = 5;
+	ks = 0;
+	kd = 0;
+	ka = 0;
+	alpha = 0;
 }
 
 bool wierd_quad_solve(const float a, const float b, const float c, float &x0, float &x1){

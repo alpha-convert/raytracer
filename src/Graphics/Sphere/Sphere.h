@@ -22,6 +22,7 @@ public:
 	bool IntersectDist(const Ray &ray, float &dist) const;
 	Vec3 NormalAt(const Vec3 &p) const;
 
+	Sphere(const json &data);
 	Sphere();
 	Sphere(Vec3 pos, float r);
 	virtual ~Sphere(){};
