@@ -6,11 +6,11 @@ EXEC=$(notdir $(CURDIR))
 
 DOCS=docs
 
-INCLUDES=-I./src -I./src/math -I./src/graphics
+INCLUDES=-I./src -I./src/math -I./src/graphics -I./src/json
 
 LIBS=-framework SDL2 -framework OpenGL -framework GLUT /usr/local/lib/libGLEW.dylib
 
-CXXFLAGS:=-Wall -Wextra -O0 -g -ggdb -march=native -ftrapv -Wundef -fverbose-asm $(INCLUDES) -std=c++11 -Wno-sign-compare
+CXXFLAGS:=-Wall -Wextra -O2 -g -ggdb -march=native -ftrapv -Wundef -fverbose-asm $(INCLUDES) -std=c++11 -Wno-sign-compare
 CFLAGS:=-Wall -Wextra -O2 -ftrapv -Wundef -fverbose-asm
 
 CPP_FILES := $(shell find src -name '*.cpp')
