@@ -15,6 +15,7 @@
 #include "Ray/Ray.h"
 #include "Color/Color.h"
 #include "Vec3/Vec3.h"
+#include "json/json.hpp"
 #include "macros.h"
 
 class Light{
@@ -24,6 +25,7 @@ public:
 	Color is; //specular component
 	Color id; //diffuse component
 
+	Light(const json &j);
 	Light(const Vec3 &p);
 	~Light(){};
 

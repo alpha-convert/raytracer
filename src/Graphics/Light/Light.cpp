@@ -7,3 +7,20 @@ Light::Light(const Vec3 &p){
 	id = Color::White;
 }
 
+
+Light::Light(const json &j){
+	//TODO: Find the source of the negative light bug
+	pos.x = j["pos"]["x"];
+	pos.y = j["pos"]["y"];
+	pos.z = j["pos"]["z"];
+	pos = -pos;
+	is.r = j["is"]["r"];
+	is.g = j["is"]["g"];
+	is.b = j["is"]["b"];
+	id.r = j["id"]["r"];
+	id.g = j["id"]["g"];
+	id.b = j["id"]["b"];
+	test_sphere.pos = pos;
+	test_sphere.r = 0.001;
+}
+
