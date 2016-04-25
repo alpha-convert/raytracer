@@ -7,26 +7,27 @@
 #include <limits>
 #include <cassert>
 #include <memory>
-#include "Math/Vec2/Vec2.h"
-#include "Math/Vec3/Vec3.h"
-#include "Math/Vec4/Vec4.h"
-#include "Math/Quat/Quat.h"
-#include "Math/Mat4/Mat4.h"
-#include "Math/Ray/Ray.h"
-#include "Math/Tree/Tree.h"
-#include "Graphics/Graphics.h"
-#include "Sphere/Sphere.h"
-#include "Plane/Plane.h"
-#include "Object/Object.h"
-#include "Light/Light.h"
+#include "Vec2.h"
+#include "Vec3.h"
+#include "Vec4.h"
+#include "Quat.h"
+#include "Mat4.h"
+#include "Ray.h"
+#include "Tree.h"
+#include "Graphics.h"
+#include "Sphere.h"
+#include "Plane.h"
+#include "Object.h"
+#include "Light.h"
 #include "OpenGL/OpenGL.h"
+#include "Audio.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <GLUT/glut.h>
 #include "settings.h"
-#include "json/json.hpp"
+#include "json.hpp"
 
-#define SUBPIXEL 1
+#define SUBPIXEL 0
 using json = nlohmann::json;
 
 void read_entire_json_file(const std::string &fname, json &contents){
@@ -35,22 +36,22 @@ void read_entire_json_file(const std::string &fname, json &contents){
 }
 
 int main(int argc, char** argv){
-	(void) argc;
-	(void) argv;
-
-	json json_scene;
-	read_entire_json_file("scene.json",json_scene);
+	USE(argc);
+	USE(argv);
 
 
+	Audio a;
 	Graphics g = Graphics(1920/2,1080/2,"Raytracer");
 	g.Clear();
 
 	//this doesn't really work but it's a start
-	float scene_angle = -M_PI/2;
+	float scene_angle = -M_PI/2; //angle from origin to camera
 	float camera_dist = 1500;
 	float screen_dist = 300;
-
+	
+	//Note: camera is currently always pointing to the origin
 	Vec3 camera_pos = Vec3(camera_dist * cos(scene_angle),0,camera_dist * sin(scene_angle));
+	Vec3 camera_dir = Vec3::K;
 	Vec3 screen_pos = Vec3(screen_dist * cos(scene_angle),0,screen_dist * sin(scene_angle));
 	Vec3 screen_normal = (camera_pos - screen_pos).normalized();
 	Vec3 screen_top_left = screen_pos + Vec3(-static_cast<float>(g.width)/2,static_cast<float>(g.height)/2,0);
@@ -58,6 +59,9 @@ int main(int argc, char** argv){
 
 	std::vector<Object *> scene;
 	std::vector<Light> lights;
+
+	json json_scene;
+	read_entire_json_file("scene.json",json_scene);
 
 	for(const auto &o : json_scene["objects"]){
 		if(o["type"] == "type_sphere"){
@@ -102,7 +106,6 @@ int main(int argc, char** argv){
 	SDL_Event e;
 	bool running =  true;
 	while(running){
-		//TODO: DEBUGGING
 		if(SDL_PollEvent(&e)){
 			if(e.type == SDL_QUIT || e.window.event == SDL_WINDOWEVENT_CLOSE){
 				running = false;
