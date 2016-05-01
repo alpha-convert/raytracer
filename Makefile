@@ -6,7 +6,8 @@ EXEC=$(notdir $(CURDIR))
 
 DOCS=docs
 
-INCLUDES=-I./src -I./src/math -I./src/graphics -I./src/json
+INCLUDE_DIRS = $(shell find src -type d | grep -v "git")
+INCLUDES=$(foreach dir, $(INCLUDE_DIRS), -I./$(dir))
 
 LIBS=-framework SDL2 -framework OpenGL -framework GLUT /usr/local/lib/libGLEW.dylib
 
