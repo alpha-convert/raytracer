@@ -11,6 +11,7 @@
 #include <vector>
 #include <functional>
 #include <cstdint>
+#include <SDL2/SDL.h>
 
 #include "Math/Vec2/Vec2.h"
 #include "Math/Vec3/Vec3.h"
@@ -23,18 +24,13 @@
 #include "Vertex/Vertex.h"
 #include "macros.h"
 
-struct SDL_Window;
-struct SDL_Surface;
-struct SDL_Renderer;
-struct SDL_Texture;
-class Color;
-
-///OpenGL style screen point [-1,1]
-class ConventionalPoint{
-	ConventionalPoint(int8_t x, int8_t y);
-private:
-	int8_t x, y;
-};
+//struct SDL_Window;
+//struct SDL_Surface;
+//struct SDL_Renderer;
+//struct SDL_Texture;
+//struct SDL_Rect;
+//struct SDL_Point;
+//class Color;
 
 /**
  * @class Graphics
@@ -45,6 +41,27 @@ private:
  * It relies on a lot of pointer passing and things that you'd usually consider outdated or archaic in modern C++.
  * This class wraps the library, providing more user-friendly methods and functions.
  */
+
+typedef struct DeferredRenderPoint{
+	SDL_Point p;
+	Color c;
+}DeferredRenderPoint;
+
+typedef struct DeferredRenderRect{
+	SDL_Rect r;
+	Color c;
+} DeferredRenderRect;
+
+typedef struct DeferredRenderFilledRect{
+	SDL_Rect r;
+	Color c;
+} DeferredRenderFilledRect;
+
+typedef struct DeferredRenderLine{
+	int x1, y1,x2,y2;
+	Color c;
+} DeferredRenderLine;
+
 class Graphics {
 	public:
 
@@ -86,34 +103,32 @@ class Graphics {
 		 * @param x2 x component of endpoint 2
 		 * @param y2 y component of endpoint 2
 		 */
-		void SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
+		void SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c);
 
 		/**
 		 * @brief Draw a Vec3 to the screen from the origin.
 		 * @param v endpoint of the line
 		 * @param scalar scaling factor of the line. Unit vectors may be mard to see, so passing a larger number here will make it easier to see
 		 */
-		void ProjectVec3(const Vec3 &v, const Color &c, int32_t scalar = 1) const;
+		void ProjectVec3(const Vec3 &v, const Color &c, int32_t scalar = 1);
 
 		/**
 		 * @brief draw a line between v1 and v2
 		 *	
 		 */
-		void LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const;
+		void LineFromVec(const Vec4 &v1, const Vec3 &v2, const Color &c);
 
-		void Line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c) const;
+		void Line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c);
 
-		void Bezier(const Vec2 &begin, const Vec2 &end, const Vec2 &control, const Color &c = Color::Black) const;
+		void PutPixel(int32_t x, int32_t y, const Color &c);
+		inline void SetColor(const Color &c);
 
-		void PutPixel(int32_t x, int32_t y, const Color &c) const;
-		inline void SetColor(const Color &c) const;
-
-		void Triangle(const std::array<Vec4,3>& tri, const Color& c) const;
-		void Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const;
+		void Triangle(const std::array<Vec4,3>& tri, const Color& c);
+		void Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill);
 
 		//std::transform
-		void Polygon(const std::vector<Vertex>& poly, const Color& c) const;
-		void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const;
+		void Polygon(const std::vector<Vertex>& poly, const Color& c);
+		void Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation);
 
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
@@ -125,11 +140,14 @@ class Graphics {
 		Object* GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray, float &dist) const;
 		Object* GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray) const;
 
-		void AvgBlur(float ksize) const;
-
 		virtual ~Graphics();
 
 	private:
+
+		std::vector<DeferredRenderPoint> points_to_draw;
+		std::vector<DeferredRenderLine> lines_to_draw;
+		std::vector<DeferredRenderRect> rects_to_draw;
+		std::vector<DeferredRenderFilledRect> filled_rects_to_draw;
 		
 		SDL_Window *window;
 		SDL_Renderer *renderer;

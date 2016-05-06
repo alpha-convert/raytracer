@@ -53,44 +53,56 @@ void Graphics::Clear() {
 }
 
 void Graphics::Update() {
+	for(const auto &p : points_to_draw){
+		SetColor(p.c);
+		SDL_RenderDrawPoint(renderer,p.p.x,p.p.y);
+	}
+	for(const auto &r : rects_to_draw){
+		SetColor(r.c);
+		SDL_RenderDrawRect(renderer,&r.r);
+	}
+	for(const auto &r : filled_rects_to_draw){
+		SetColor(r.c);
+		SDL_RenderFillRect(renderer,&r.r);
+	}
+	for(const auto &l : lines_to_draw){
+		SetColor(l.c);
+		SDL_RenderDrawLine(renderer,l.x1,l.y1,l.x2,l.y2);
+	}
 	SDL_UpdateWindowSurface(this->window);
 	SDL_RenderPresent(this->renderer);
-
 }
 
-void Graphics::ProjectVec3(const Vec3 &v, const Color &c, int scalar) const{
+void Graphics::ProjectVec3(const Vec3 &v, const Color &c, int scalar){
 	this->SpaceLine(0, 0, v.dot(Vec3::I) * scalar, v.dot(Vec3::J) * scalar, c);
 }
 
-void Graphics::LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c) const {
+void Graphics::LineFromVec(const Vec4 &v1, const Vec3 &v2, const Color &c){
 	this->SpaceLine(v1.x, v1.y, v2.x, v2.y, c);
 }
 
-void Graphics::SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2,const Color &c) const {
+void Graphics::SpaceLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2,const Color &c){
 	Line(this->width / 2 + x1, this->height / 2 - y1, this->width / 2 + x2,
 			this->height / 2 - y2, c);
 }
 
-void Graphics::Line(int32_t x1, int y1, int x2, int y2, const Color &c) const {
-	SetColor(c);
-	SDL_RenderDrawLine(this->renderer, x1, y1, x2, y2);
+void Graphics::Line(int32_t x1, int y1, int x2, int y2, const Color &c){
+	DeferredRenderLine r;
+	r.c = c;
+	r.x1 = x1;
+	r.y1 = y1;
+	r.x2 = x2;
+	r.y2 = y2;
+	lines_to_draw.push_back(r);
 }
 
-
-void Graphics::Bezier(const Vec2 &begin, const Vec2 &end, const Vec2 &control, const Color &c) const{
-	int x_min = std::min(begin.x,end.x);
-	int y_min = std::min(begin.y,end.y);
-	(void) (x_min + y_min);
-	(void) control;
-	(void) c;
-}
-
-
-
-void Graphics::PutPixel(int x, int y, const Color &c) const {
+void Graphics::PutPixel(int x, int y, const Color &c) {
 	if (!(x > this->width && x < 0 && y > this->height && y < 0)) {
-		SetColor(c);
-		SDL_RenderDrawPoint(this->renderer, x, y);
+		DeferredRenderPoint p;
+		p.c = c;
+		p.p.x = x;
+		p.p.y = y;
+		points_to_draw.push_back(p);
 	}
 }
 
@@ -101,15 +113,12 @@ Graphics::~Graphics() {
 	SDL_Quit();
 }
 
-void Graphics::SetColor(const Color &c) const {
-	//assert(INRANGE(c.r,0,1));
-	//assert(INRANGE(c.g,0,1));
-	//assert(INRANGE(c.b,0,1));
+void Graphics::SetColor(const Color &c) {
 	SDL_SetRenderDrawColor(this->renderer, 255 * c.r, 255 * c.g, 255*c.b, 255);
 
 }
 
-Color Graphics::SDLColorToColor(uint32_t n) const{
+Color Graphics::SDLColorToColor(uint32_t n) const {
 	Color c = Color(0,0,0);
 	c.r = (n & 0xff000000) / 255.0f;
 	c.g = (n & 0xff0000) / 255.0f;
@@ -117,17 +126,8 @@ Color Graphics::SDLColorToColor(uint32_t n) const{
 	return c;
 }
 
-Vec3 GetBarycentric(const Vec3 &t0, const Vec3 &t1, const Vec3 &t2, const Vec3 &p){
-	(void) t0;
-	(void) t1;
-	(void) t2;
-	(void) p;
-	Vec3 as_bary;
-	return as_bary;
-}
-
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
-void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) const{
+void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) {
 	std::array<Vec4,3> corrected = tri;
 	(void) fill;
 	Mat4 proj = Mat4::Projection();
@@ -155,13 +155,13 @@ void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Col
 	//get bounding box for rasterizing
 }
 
-void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c) const{
+void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c) {
 	Triangle(tri,c,c);
 }
 
 
 
-void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) const{
+void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) {
 	std::vector<Vertex> corrected = poly;
 	Mat4 proj = Mat4::Projection();
 
@@ -178,7 +178,7 @@ void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) const{
 }
 
 
-void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) const{
+void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) {
 	std::vector<Vertex> corrected = poly;
 	Mat4 proj = Mat4::Projection();
 
@@ -255,7 +255,7 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 
 	assert(IMPLIES(hit,closest_object));
 	assert(IMPLIES(closest_dist == std::numeric_limits<float>::infinity(),!hit));
-	
+
 
 	if(hit){
 		Color ambient = closest_object->surface_color;
@@ -315,48 +315,3 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 	return final_color;
 }
 
-
-
-//TODO: make this work
-void Graphics::AvgBlur(float ksize) const{
-	SDL_RendererInfo info;
-	SDL_GetRendererInfo(renderer,&info);
-
-	auto render_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, 
-			    SDL_TEXTUREACCESS_STREAMING, width, height);
-
-	uint32_t format;
-	int *acc;
-	int *w;
-	int *h;
-	USE(w);
-	USE(h);
-	USE(ksize);
-	acc = w = h = nullptr;
-	SDL_QueryTexture(render_texture,&format,acc,w,h);
-	auto pitch = SDL_BITSPERPIXEL(format) * width / 8;
-
-	void *raw_pixel_data = malloc(width * height * sizeof(uint8_t) * pitch);
-	uint32_t *pixel_data = (uint32_t *) raw_pixel_data;
-	SDL_RenderReadPixels(renderer,NULL, format,raw_pixel_data,pitch);
-	USE(raw_pixel_data);
-	USE(pixel_data);
-
-	for(int y = 0; y < height; ++y){
-		for(int x = 0; x < width; ++x){
-			auto i = width * y + x;
-			USE(i);
-//			printf("%x\n",pixel_data[i]);
-
-		}
-	}
-	
-	free(raw_pixel_data);
-}
-
-ConventionalPoint::ConventionalPoint(int8_t x, int8_t y){
-	assert(INEQ(-1,<=,x,<=,1));
-	assert(INEQ(-1,<=,y,<=,1));
-	this->x = x;
-	this->y = y;
-}
