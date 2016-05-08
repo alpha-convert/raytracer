@@ -17,8 +17,10 @@ public:
 	float r;
 	float g;
 	float b;
+	float a;
 	Color();
 	Color(float r, float g, float b);
+	Color(float r, float g, float b, float a);
 	virtual ~Color(){};
 
 	static const Color Red;
@@ -26,6 +28,7 @@ public:
 	static const Color Blue;
 	static const Color Black;
 	static const Color White;
+	static const Color Clear;
 
 	bool operator==(const Color& c) const;
 	Color operator*(float f) const;

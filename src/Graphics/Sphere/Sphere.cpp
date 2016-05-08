@@ -1,4 +1,6 @@
 #include "Sphere.h"
+#include <typeinfo>
+#include <iostream>
 
 Sphere::Sphere(){
 	this->pos = Vec3(0,0,0);
@@ -17,7 +19,11 @@ Sphere::Sphere(const json &j){
 	kd = j["blinn"]["kd"];
 	ka = j["blinn"]["ka"];
 	alpha = j["blinn"]["alpha"];
-
+	if(j["texture"] != ""){
+		std::string texture_name = j["texture"];
+		std::cout << "texture name " << texture_name << std::endl;
+		tex = new Texture(texture_name.c_str());
+	}
 }
 
 Sphere::Sphere(Vec3 pos, float r) : pos(pos), r(r){
@@ -62,4 +68,9 @@ bool Sphere::IntersectDist(const Ray &ray, float &dist) const{
 
 Vec3 Sphere::NormalAt(const Vec3 &v) const{
 	return (v - pos).normalized();
+}
+
+Color Sphere::ColorAt(const Vec3 &v) const{
+	USE(v);
+	return surface_color;
 }

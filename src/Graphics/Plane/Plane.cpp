@@ -23,6 +23,11 @@ Vec3 Plane::NormalAt(const Vec3 & p) const{
 	return normal;
 }
 
+Color Plane::ColorAt(const Vec3 &v) const{
+	USE(v);
+	return surface_color;
+}
+
 Plane::Plane(const json &j){
 	pos.x = j["pos"]["x"];
 	pos.y = j["pos"]["y"];
@@ -37,7 +42,11 @@ Plane::Plane(const json &j){
 	kd = j["blinn"]["kd"];
 	ka = j["blinn"]["ka"];
 	alpha = j["blinn"]["alpha"];
-	
+	if(j["texture"] != ""){
+		std::string texture_name = j["texture"];
+		tex = new Texture(texture_name.c_str());
+	}
+	printf("Loaded texture for Plane\n");
 }
 
 Plane::Plane(){
@@ -45,16 +54,11 @@ Plane::Plane(){
 	pos = Vec3(i,i,i);
 	normal = Vec3(0,0,-1); //must be unit length or something will go horribly wrong
 
-	ks = 0.2;
-	kd = 0.5;
-	ka = 0.3;
-	alpha = 2;
 }
 
 Plane::Plane(Vec3 &p, Vec3& normal) : pos(p){
 	assert(UNITLENGTH(normal));
 	this->normal = normal;
-
 	ks = 0.05;
 	kd = 0.8;
 	ka = 0.1;

@@ -22,11 +22,14 @@ public:
 
 	bool IntersectDist(const Ray &ray, float &dist) const;
 	Vec3 NormalAt(const Vec3 &p) const;
-	const static ObjectType type = ObjectType::type_plane;
+	Color ColorAt(const Vec3 &) const;
 
 	Plane(const json &data);
 	Plane();
 	Plane(Vec3 &p, Vec3& normal);
 	virtual ~Plane(){};
+
+	const static ObjectType type = ObjectType::type_plane;
+
 private:
 };

@@ -114,7 +114,7 @@ Graphics::~Graphics() {
 }
 
 void Graphics::SetColor(const Color &c) {
-	SDL_SetRenderDrawColor(this->renderer, 255 * c.r, 255 * c.g, 255*c.b, 255);
+	SDL_SetRenderDrawColor(this->renderer, 255 * c.r, 255 * c.g, 255*c.b, 255*c.a);
 
 }
 
@@ -258,11 +258,12 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 
 
 	if(hit){
-		Color ambient = closest_object->surface_color;
-		final_color = ambient * closest_object->ka;
-		//Iterate over lights
 		Vec3 intersection_point = cast_ray.Along(closest_dist);
 		Vec3 normal = closest_object->NormalAt(intersection_point);
+
+		Color ambient = closest_object->ColorAt(intersection_point);
+		final_color = ambient * closest_object->ka;
+		//Iterate over lights
 
 		//create the bounce ray
 		Ray bounce_ray;
