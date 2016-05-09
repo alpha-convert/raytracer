@@ -22,7 +22,6 @@ class Object {
 public:
 	Object(const json &data);
 	Object(){};
-	~Object(){if(tex) delete tex;};
 	virtual bool IntersectDist(const Ray &, float &) const = 0;
 	virtual Vec3 NormalAt(const Vec3 &) const = 0;
 	virtual Color ColorAt(const Vec3 &) const = 0;
