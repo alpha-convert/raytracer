@@ -19,6 +19,7 @@
 #include "Plane.h"
 #include "Object.h"
 #include "Light.h"
+#include "Texture.h"
 #include "OpenGL/OpenGL.h"
 #include "Audio.h"
 #include <SDL2/SDL.h>
@@ -27,7 +28,7 @@
 #include "settings.h"
 #include "json.hpp"
 
-#define SUBPIXEL 0
+#define SUBPIXEL 1
 using json = nlohmann::json;
 
 void read_entire_json_file(const std::string &fname, json &contents){
@@ -40,9 +41,11 @@ int main(int argc, char** argv){
 	USE(argv);
 
 
-	Audio a;
+	//Audio a;
 	Graphics g = Graphics(1920/2,1080/2,"Raytracer");
 	g.Clear();
+
+	//Texture lenna = Texture("textures/lenna.png");
 
 	//this doesn't really work but it's a start
 	float scene_angle = -M_PI/2; //angle from origin to camera
@@ -71,13 +74,14 @@ int main(int argc, char** argv){
 		}
 	}
 
+	printf("Done creating\n");
+
 	for(const auto &l : json_scene["lights"]){
 		Light nl = Light(l);
 		lights.push_back(nl);
 		Sphere *s = new Sphere();
 		*s = nl.test_sphere;
 		scene.push_back(s);
-
 	}
 
 	//For each pixel
@@ -100,6 +104,16 @@ int main(int argc, char** argv){
 			g.PutPixel(x,y,final_color);
 		}
 	}
+/*
+	int img_height = lenna.GetHeight();
+	int img_width = lenna.GetWidth();
+	for(int y = 0; y < img_height; ++y){
+		for(int x = 0; x < img_width; ++x){
+			g.PutPixel(x,y,lenna.AtReal(x,y));
+		}
+	}
+
+*/
 
 	g.Update();
 
@@ -114,9 +128,7 @@ int main(int argc, char** argv){
 
 	}
 
-	for(auto &a:scene){
-		delete a;
-	}
+	for(auto &a:scene) delete a;
 
 	SDL_Quit();
 }

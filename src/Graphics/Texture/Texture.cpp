@@ -1,8 +1,8 @@
 #include "Texture.h"
 
 Color Texture::At(float u, float v) const{
-	assert(u < 1 && u > 0);
-	assert(v < 1 && v > 0);
+	assert(u <= 1 && u >= 0);
+	assert(v <= 1 && v >= 0);
 	return AtReal(u*real_width,v*real_height);
 }
 
@@ -23,13 +23,17 @@ Texture::Texture(const char* _fname) {
 	if(error){
 		printf("Error making texture\n");
 	}
+	printf("Texture is %d by %d\n",real_width,real_height);
 }
 
-Texture::~Texture(){}
+Texture::~Texture(){
+}
 Texture::Texture(){}
 
 
 Color Texture::AtReal(int u, int v) const{
+	assert(u <= real_width && u >= 0);
+	assert(v <= real_height && v >= 0);
 	//Pixels are ordered RGBA,RGBA,RGBA,RGBA...
 	float r = static_cast<float>(image_data[4 * v * real_width + 4 * u + 0]) / 255;
 	float g = static_cast<float>(image_data[4 * v * real_width + 4 * u + 1]) / 255;
