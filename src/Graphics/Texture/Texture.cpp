@@ -20,13 +20,11 @@ Texture::Texture(const char* _fname) {
 	std::vector<unsigned char> buffer;
 	lodepng::load_file(buffer, fname); //load the image file with given filename
 	auto error = lodepng::decode(image_data, real_width, real_height, buffer); //decode the png
-	if(error){
-		printf("Error making texture\n");
-	}
-	printf("Texture is %d by %d\n",real_width,real_height);
+	if(error) printf("Error making texture\n");
 }
 
 Texture::~Texture(){
+
 }
 Texture::Texture(){}
 
