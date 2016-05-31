@@ -22,7 +22,6 @@ Sphere::Sphere(const json &j){
 	tex = nullptr;
 	if(j["texture"] != ""){
 		std::string texture_name = j["texture"];
-		printf("Making a texture");
 		tex = new Texture(texture_name.c_str());
 	}
 }

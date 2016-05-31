@@ -242,7 +242,7 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 	//general init stuff
 	float closest_dist = std::numeric_limits<float>::infinity();
 	auto hit = false;
-	Color final_color = Color::White;
+	Color final_color = Color::Black;
 
 	//base case
 	if(recurse_times >= 3){
