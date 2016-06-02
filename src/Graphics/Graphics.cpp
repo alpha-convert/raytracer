@@ -77,7 +77,7 @@ void Graphics::ProjectVec3(const Vec3 &v, const Color &c, int scalar){
 	this->SpaceLine(0, 0, v.dot(Vec3::I) * scalar, v.dot(Vec3::J) * scalar, c);
 }
 
-void Graphics::LineFromVec(const Vec4 &v1, const Vec3 &v2, const Color &c){
+void Graphics::LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c){
 	this->SpaceLine(v1.x, v1.y, v2.x, v2.y, c);
 }
 
@@ -107,7 +107,6 @@ void Graphics::PutPixel(int x, int y, const Color &c) {
 }
 
 Graphics::~Graphics() {
-
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(this->renderer);
 	SDL_Quit();
@@ -127,7 +126,8 @@ Color Graphics::SDLColorToColor(uint32_t n) const {
 }
 
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
-void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill) {
+void Graphics::Triangle(const std::array<Vec3,3>& tri, const Color& c, const Color &fill) {
+/*
 	std::array<Vec4,3> corrected = tri;
 	(void) fill;
 	Mat4 proj = Mat4::Projection();
@@ -137,9 +137,10 @@ void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Col
 		v = (proj * v) / scale;
 	}
 
-	auto t0 = corrected[0];
-	auto t1 = corrected[1];
-	auto t2 = corrected[2];
+*/
+	auto t0 = tri[0];
+	auto t1 = tri[1];
+	auto t2 = tri[2];
 
 	//sort the three in order
 
@@ -153,9 +154,11 @@ void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c, const Col
 	LineFromVec(t2,t0,c);
 
 	//get bounding box for rasterizing
+	//nope jk this isn't done
+	//@TODO: Do fills or whatever
 }
 
-void Graphics::Triangle(const std::array<Vec4,3>& tri, const Color& c) {
+void Graphics::Triangle(const std::array<Vec3,3>& tri, const Color& c) {
 	Triangle(tri,c,c);
 }
 
@@ -238,11 +241,11 @@ Object *Graphics::GetClosestObject(const std::vector<Object *> &objects, const R
 }
 
 
-Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Light> lights, const Ray &cast_ray, const Vec3 &camera_pos,unsigned recurse_times) const{
+Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Light> &lights, const Ray &cast_ray, const Vec3 &camera_pos,unsigned recurse_times) const{
 	//general init stuff
 	float closest_dist = std::numeric_limits<float>::infinity();
 	auto hit = false;
-	Color final_color = Color::Black;
+	Color final_color = Color::White;
 
 	//base case
 	if(recurse_times >= 3){
@@ -280,12 +283,14 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 			light_check_ray.orig = l.test_sphere.pos;
 			light_check_ray.dir = (l.test_sphere.pos - intersection_point).normalized();
 
+			//get the distance from the closest object to the light
 			float light_check_dist;
 			Object *closest_to_light = GetClosestObject(scene,light_check_ray,light_check_dist);
 			USE(closest_to_light);
 
+			//get the point where it hits
 			auto light_check_point = light_check_ray.orig + light_check_ray.dir * light_check_dist;
-
+			//and check if we're talking about the same point here
 			if(light_check_point == intersection_point){
 				Vec3 Lm = (light_check_point-l.pos).normalized();
 				Vec3 N = normal.normalized();
@@ -307,7 +312,7 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 				assert(0<=diffuse_term.g<=1);
 				assert(0<=diffuse_term.b<=1);
 
-				Color reflection_term = Trace(scene,lights,light_check_ray,camera_pos,recurse_times+1) * 0.1;
+				Color reflection_term = Trace(scene,lights,light_check_ray,camera_pos,recurse_times+1) * closest_to_light->ks;
 
 				final_color = (final_color + diffuse_term + specular_term);
 			}

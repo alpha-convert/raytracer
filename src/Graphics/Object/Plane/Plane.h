@@ -32,4 +32,7 @@ public:
 	const static ObjectType type = ObjectType::type_plane;
 
 private:
+	void ComputeBasis();
+	Vec3 basis_u;
+	Vec3 basis_v;
 };

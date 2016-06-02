@@ -1,5 +1,6 @@
 #include "Triangle.h"
 #include <iostream>
+#include "macros.h"
 
 Triangle::Triangle(){
 	a = b = c = Vec3(0,0,0);
@@ -28,6 +29,8 @@ Triangle::Triangle(const json &j){
 
 
 bool Triangle::IntersectDist(const Ray &ray, float &dist) const{
+	USE(ray);
+	USE(dist);
 	//https://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld018.htm
 	return false;
 }

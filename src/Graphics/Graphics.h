@@ -37,7 +37,7 @@
  * @brief Wrapper around SDL graphics
  * @author Joseph Cutler
  *
- * The SDL graphics library (while very elegant and cross platform) isn't really meant for C++ use.
+ * The SDL graphics library (while very elegant and cross platform) isn't really meant for modern C++ use.
  * It relies on a lot of pointer passing and things that you'd usually consider outdated or archaic in modern C++.
  * This class wraps the library, providing more user-friendly methods and functions.
  */
@@ -113,18 +113,52 @@ class Graphics {
 		void ProjectVec3(const Vec3 &v, const Color &c, int32_t scalar = 1);
 
 		/**
-		 * @brief draw a line between v1 and v2
-		 *	
+		 * @brief Draw a line between v1 and v2
+		 * @param v1 start point of the line
+		 * @param v2 end point of the line
+		 * @param c color of the line to be drawn
 		 */
-		void LineFromVec(const Vec4 &v1, const Vec3 &v2, const Color &c);
+		void LineFromVec(const Vec3 &v1, const Vec3 &v2, const Color &c);
 
+		/**
+		 * @brief Draw a line from (x1,y1) to (x2,y2)
+		 * @param x1 x coord for point 1
+		 * @param y1 y coord for point 1
+		 * @param x2 x coord for point 2
+		 * @param y2 y coord for point 2
+		 * @param c color of the line to be drawn
+		 */
 		void Line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const Color &c);
 
+		/**
+		 * @brief Draw a pixel at (x,y)
+		 * @param x x coord of the point to draw
+		 * @param y y coord of the point to draw
+		 * @param c color of the point to draw
+		 */
 		void PutPixel(int32_t x, int32_t y, const Color &c);
+
+		/**
+		 * @brief Change the current draw color
+		 * @param c new draw color
+		 */
 		inline void SetColor(const Color &c);
 
-		void Triangle(const std::array<Vec4,3>& tri, const Color& c);
-		void Triangle(const std::array<Vec4,3>& tri, const Color& c, const Color &fill);
+
+		/**
+		 * @brief Draw a triangle
+		 * @param tri Vertexes of the triangle
+		 * @param c outline color of the triangle to draw
+		 */
+		void Triangle(const std::array<Vec3,3>& tri, const Color& c);
+		/**
+		 * @brief Draw a triangle
+		 * @param tri Vertexes of the triangle
+		 * @param c outline color of the triangle to draw
+		 * @param fill fill color of the triangle to draw
+		 * @warning fill color not implemented
+		 */
+		void Triangle(const std::array<Vec3,3>& tri, const Color& c, const Color &fill);
 
 		//std::transform
 		void Polygon(const std::vector<Vertex>& poly, const Color& c);
@@ -132,11 +166,7 @@ class Graphics {
 
 		void Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform);
 
-		/**
-		 * I hate this pattern, but we have to use it.
-		 */
-		Color Trace(const std::vector<Object *> &scene, const std::vector<Light> lights, const Ray &cast_ray, const Vec3 &camera_pos,unsigned recurse_times) const;
-		Color Trace(const std::vector<Object *> &scene, const std::vector<Light>, const Ray &cast_ray, unsigned recurse_times) const;
+		Color Trace(const std::vector<Object *> &scene, const std::vector<Light> &lights, const Ray &cast_ray, const Vec3 &camera_pos,unsigned recurse_times) const;
 		Object* GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray, float &dist) const;
 		Object* GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray) const;
 
