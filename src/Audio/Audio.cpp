@@ -4,6 +4,9 @@
 
 
 void Audio::Callback(void *udata, uint8_t *stream, int len){
+	USE(len);
+	USE(stream);
+	USE(udata);
 	SDL_LockAudio();
 	for(int i = 0; i < len; ++i){
 		stream[i] = i % 255;

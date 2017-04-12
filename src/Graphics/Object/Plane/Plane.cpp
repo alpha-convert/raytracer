@@ -23,14 +23,21 @@ Vec3 Plane::NormalAt(const Vec3 & p) const{
 	return normal;
 }
 
-Color Plane::ColorAt(const Vec3 &p) const{
+Color Plane::ColorAt(const Vec3 &d) const{
 	if(tex){
 		//auto dist_from_center = (p - pos).mag();
 		auto tex_width = tex->GetWidth();
 		auto tex_height = tex->GetHeight();
-		auto u = std::abs(((int)floor(p.x) + tex_width/2) % (int)tex_width);
-		auto v = std::abs(((int)floor(p.z) + tex_height/2) % (int)tex_height);
-		return tex->AtReal(u,v);
+
+        //auto u = std::abs(((int)floor(d.x) + tex_width/2) % (int)tex_width);
+        //auto v = std::abs(((int)floor(d.z) + tex_height/2) % (int)tex_height);
+        //return tex->AtReal(u,v);
+
+        auto to_point = d - pos;
+        float u = to_point.dot(basis_u);
+        float v = to_point.dot(basis_v);
+
+		return tex->AtReal(fabs(fmod(u,tex_width)),fabs(fmod(v,tex_height)));
 	} else {
 		return surface_color;
 	}
@@ -43,6 +50,7 @@ Plane::Plane(const json &j){
 	normal.x = j["normal"]["x"];
 	normal.y = j["normal"]["y"];
 	normal.z = j["normal"]["z"];
+    normal.normalizeInPlace();
 	surface_color.r = j["surface_color"]["r"];
 	surface_color.g = j["surface_color"]["g"];
 	surface_color.b = j["surface_color"]["b"];
@@ -56,24 +64,15 @@ Plane::Plane(const json &j){
 		tex = new Texture(texture_name.c_str());
 	}
 	ComputeBasis();
-}
-
-
-Plane::Plane(){
-	auto i = -std::numeric_limits<float>::infinity();
-	pos = Vec3(i,i,i);
-	normal = Vec3(0,0,-1); //must be unit length or something will go horribly wrong
-	ComputeBasis();
-}
-
-Plane::Plane(Vec3 &p, Vec3& normal) : pos(p){
 	assert(UNITLENGTH(normal));
-	this->normal = normal;
-	ks = 0.05;
-	kd = 0.8;
-	ka = 0.1;
-	alpha = 2;
-	ComputeBasis();
-} 
+}
 
-void Plane::ComputeBasis(){}
+
+//Thanks to
+//https://www.reddit.com/r/math/comments/5qbth4/how_can_i_get_a_uv_coordinate_space_for_a_plane/dcy27va/
+void Plane::ComputeBasis(){
+    auto u = Vec3::I.cross(normal);
+    auto v = u.cross(normal);
+    basis_u = u.normalized();
+    basis_v = v.normalized();
+}

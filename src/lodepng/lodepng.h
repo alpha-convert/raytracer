@@ -28,6 +28,7 @@ freely, subject to the following restrictions:
 
 #include <string.h> /*for size_t*/
 
+
 extern const char* LODEPNG_VERSION_STRING;
 
 /*

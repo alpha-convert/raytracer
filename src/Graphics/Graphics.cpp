@@ -39,11 +39,9 @@ Graphics::Graphics(uint32_t width, uint32_t height, const char *name) {
 	if (!this->renderer) {
 		fprintf(stderr,"Error creating renderer: %s", SDL_GetError());
 	}
-	assert(renderer!= nullptr);
-
+	assert(renderer != nullptr);
 
 	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
-
 
 }
 
@@ -126,90 +124,6 @@ Color Graphics::SDLColorToColor(uint32_t n) const {
 }
 
 //https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
-void Graphics::Triangle(const std::array<Vec3,3>& tri, const Color& c, const Color &fill) {
-/*
-	std::array<Vec4,3> corrected = tri;
-	(void) fill;
-	Mat4 proj = Mat4::Projection();
-
-	for(auto& v : corrected){
-		auto scale = v.z;
-		v = (proj * v) / scale;
-	}
-
-*/
-	auto t0 = tri[0];
-	auto t1 = tri[1];
-	auto t2 = tri[2];
-
-	//sort the three in order
-
-	if (t0.y>t1.y) std::swap(t0, t1); 
-	if (t0.y>t2.y) std::swap(t0, t2); 
-	if (t1.y>t2.y) std::swap(t1, t2); 
-
-	//draw lines
-	LineFromVec(t0,t1,c);
-	LineFromVec(t1,t2,c);
-	LineFromVec(t2,t0,c);
-
-	//get bounding box for rasterizing
-	//nope jk this isn't done
-	//@TODO: Do fills or whatever
-}
-
-void Graphics::Triangle(const std::array<Vec3,3>& tri, const Color& c) {
-	Triangle(tri,c,c);
-}
-
-
-
-void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c) {
-	std::vector<Vertex> corrected = poly;
-	Mat4 proj = Mat4::Projection();
-
-	for(auto& v : corrected){
-		auto scale = v.pos.z;
-		v.pos = (proj * v.pos) / scale;
-	}
-
-	for(const auto& vertex : poly){
-		for(const auto vert_ref : vertex.adj){
-			this->LineFromVec(vertex.pos,poly[vert_ref].pos,c);
-		}
-	}
-}
-
-
-void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const Quat& rotation) {
-	std::vector<Vertex> corrected = poly;
-	Mat4 proj = Mat4::Projection();
-
-	for(auto& v : corrected){
-		auto scale = v.pos.z;
-		v.pos = (proj * v.pos) / scale;
-	}
-
-	for(const auto& vertex : poly){
-		for(const auto vert_ref : vertex.adj){
-			this->LineFromVec(vertex.pos.rotate(rotation),poly[vert_ref].pos.rotate(rotation),c);
-		}
-	}
-}
-
-void Graphics::Polygon(const std::vector<Vertex>& poly, const Color& c, const std::function<Vec4(Vec4)> transform){
-	auto post_transform = poly;
-	for(auto& vert : post_transform){
-		vert.pos = transform(vert.pos);
-	}
-
-	for(const auto& vertex : post_transform){
-		for(const auto vert_ref : vertex.adj){
-			this->LineFromVec(vertex.pos,post_transform[vert_ref].pos,c);
-		}
-	}
-}
-
 Object *Graphics::GetClosestObject(const std::vector<Object *> &objects, const Ray &cast_ray, float &dist) const{
 	Object *closest_object = NULL;
 	dist = std::numeric_limits<float>::infinity();
@@ -286,7 +200,6 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 			//get the distance from the closest object to the light
 			float light_check_dist;
 			Object *closest_to_light = GetClosestObject(scene,light_check_ray,light_check_dist);
-			USE(closest_to_light);
 
 			//get the point where it hits
 			auto light_check_point = light_check_ray.orig + light_check_ray.dir * light_check_dist;
@@ -320,4 +233,3 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
 	}
 	return final_color;
 }
-

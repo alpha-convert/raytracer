@@ -7,6 +7,7 @@
 #include <limits>
 #include <cassert>
 #include <memory>
+
 #include "Vec2.h"
 #include "Vec3.h"
 #include "Vec4.h"
@@ -16,20 +17,24 @@
 #include "Tree.h"
 #include "Graphics.h"
 #include "Sphere.h"
+#include "Triangle.h"
 #include "Plane.h"
 #include "Object.h"
 #include "Light.h"
 #include "Texture.h"
 #include "OpenGL/OpenGL.h"
 #include "Audio.h"
+#include "settings.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <GLUT/glut.h>
-#include "settings.h"
+
 #include "json.hpp"
 
 #define SUBPIXEL 1
 using json = nlohmann::json;
+using string = std::string;
 
 void read_entire_json_file(const std::string &fname, json &contents){
 	std::ifstream ifs (fname,std::ifstream::in);
@@ -40,7 +45,6 @@ int main(int argc, char** argv){
 	USE(argc);
 	USE(argv);
 
-
 	//Audio a;
 	Graphics g = Graphics(1920/2,1080/2,"Raytracer");
 	g.Clear();
@@ -48,33 +52,37 @@ int main(int argc, char** argv){
 	//Texture lenna = Texture("textures/lenna.png");
 
 	//this doesn't really work but it's a start
-	float scene_angle = -M_PI/2; //angle from origin to camera
-	float camera_dist = 1500;
-	float screen_dist = 300;
-	
+	constexpr float scene_angle = -M_PI/2; //angle from origin to camera
+	constexpr float camera_dist = 1500;
+	constexpr float screen_dist = 300;
+
 	//Note: camera is currently always pointing to the origin
 	Vec3 camera_pos = Vec3(camera_dist * cos(scene_angle),0,camera_dist * sin(scene_angle));
 	Vec3 camera_dir = Vec3::K;
+	USE(camera_dir);
 	Vec3 screen_pos = Vec3(screen_dist * cos(scene_angle),0,screen_dist * sin(scene_angle));
 	Vec3 screen_normal = (camera_pos - screen_pos).normalized();
 	Vec3 screen_top_left = screen_pos + Vec3(-static_cast<float>(g.width)/2,static_cast<float>(g.height)/2,0);
 	USE(screen_normal);
 
+    //Global lists and maps
 	std::vector<Object *> scene;
 	std::vector<Light> lights;
+    std::map<std::string,const Texture &> textures;
 
 	json json_scene;
-	read_entire_json_file("scene.json",json_scene);
+	read_entire_json_file("planescene.json",json_scene);
 
 	for(const auto &o : json_scene["objects"]){
-		if(o["type"] == "type_sphere"){
+		auto type = o["type"];
+		if(type == "type_sphere"){
 			scene.push_back(new Sphere(o));
-		} else if(o["type"] == "type_plane"){
+		} else if(type == "type_plane"){
 			scene.push_back(new Plane(o));
+		} else if(type == "type_triangle"){
+			scene.push_back(new Triangle(o));
 		}
 	}
-
-	printf("Done creating\n");
 
 	for(const auto &l : json_scene["lights"]){
 		Light nl = Light(l);
@@ -104,16 +112,6 @@ int main(int argc, char** argv){
 			g.PutPixel(x,y,final_color);
 		}
 	}
-/*
-	int img_height = lenna.GetHeight();
-	int img_width = lenna.GetWidth();
-	for(int y = 0; y < img_height; ++y){
-		for(int x = 0; x < img_width; ++x){
-			g.PutPixel(x,y,lenna.AtReal(x,y));
-		}
-	}
-
-*/
 
 	g.Update();
 
@@ -129,6 +127,8 @@ int main(int argc, char** argv){
 	}
 
 	for(auto &a:scene) delete a;
-
 	SDL_Quit();
+
+    assert(textures.get().empty());
+
 }

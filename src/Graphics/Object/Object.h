@@ -25,12 +25,9 @@ public:
 	virtual bool IntersectDist(const Ray &, float &) const = 0;
 	virtual Vec3 NormalAt(const Vec3 &) const = 0;
 	virtual Color ColorAt(const Vec3 &) const = 0;
-	void AddTexture(Texture &t){
-		tex = &t;
-	};
 	const static ObjectType type;
 	Color surface_color;
-	Texture *tex;
+        const std::string texture_key;
 
 	float ks;
 	float kd;
@@ -38,4 +35,5 @@ public:
 	float alpha;
 
 private:
+        std::shared_ptr<std::map<std::string,const Texture &>> global_texture_map;
 };
