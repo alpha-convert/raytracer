@@ -16,10 +16,11 @@ int Texture::GetWidth() const{
 
 Texture::Texture(const char* _fname){
     fname = _fname;
-    printf("Creating new texture from file %s...\n TODO: Cache multi-use textures\n",_fname);
+    printf("Creating new texture from file %s...\n",_fname);
     std::vector<unsigned char> buffer;
     lodepng::load_file(buffer, fname); //load the image file with given filename
     auto error = lodepng::decode(image_data, real_width, real_height, buffer); //decode the png
+    if(error) printf("Error making texture\n");
 }
 
 Texture::~Texture(){}
