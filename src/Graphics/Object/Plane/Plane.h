@@ -24,10 +24,9 @@ public:
 	Vec3 NormalAt(const Vec3 &p) const;
 	Color ColorAt(const Vec3 &) const;
 
-	Plane(const json &data);
+	Plane(const json &data,std::shared_ptr<Texture::texturemap>);
 	Plane();
-	Plane(Vec3 &p, Vec3& normal);
-	~Plane(){if(tex != nullptr) delete tex;};
+	~Plane(){};
 
 	const static ObjectType type = ObjectType::type_plane;
 

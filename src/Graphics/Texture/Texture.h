@@ -22,17 +22,15 @@
 //OTHERWISE, LOAD IT UP.
 class Texture {
 public:
-        typedef std::map<std::string,const Texture &> texturemap;
+        typedef std::map<std::string,std::shared_ptr<Texture>> texturemap;
 
 	Color At(float u, float v) const;
 	Color AtReal(int u, int v) const;
 	int GetHeight() const;
 	int GetWidth() const;
-	Texture(const char*,std::string,
-                std::shared_ptr<texturemap>); 
+	Texture(const char*); 
 	~Texture();
 private:
-        std::shared_ptr<texturemap> global_texture_map;
 	unsigned int real_width;
 	unsigned int real_height;
 	std::vector<unsigned char> image_data;

@@ -7,7 +7,7 @@ Sphere::Sphere(){
 	this->r = 0;
 }
 
-Sphere::Sphere(const json &j){
+Sphere::Sphere(const json &j,std::shared_ptr<Texture::texturemap> _gtm){ 
 	pos.x = j["pos"]["x"];
 	pos.y = j["pos"]["y"];
 	pos.z = j["pos"]["z"];
@@ -20,17 +20,8 @@ Sphere::Sphere(const json &j){
 	ka = j["blinn"]["ka"];
 	alpha = j["blinn"]["alpha"];
 	tex = nullptr;
-	if(j["texture"] != ""){
-		std::string texture_name = j["texture"];
-		tex = new Texture(texture_name.c_str());
-	}
-}
-
-Sphere::Sphere(Vec3 pos, float r) : pos(pos), r(r){
-	ks = 0;
-	kd = 0;
-	ka = 0;
-	alpha = 0;
+    LoadTexture(j,_gtm);
+	
 }
 
 bool wierd_quad_solve(const float a, const float b, const float c, float &x0, float &x1){

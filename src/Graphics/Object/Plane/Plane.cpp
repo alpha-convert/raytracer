@@ -2,32 +2,32 @@
 
 //https://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
 bool Plane::IntersectDist(const Ray &ray, float &dist) const{
-	bool hit = false;
-	Vec3 Pr = ray.orig;
-	Vec3 P0 = pos;
-	Vec3 n = normal;
-	Vec3 ur = ray.dir;
+    bool hit = false;
+    Vec3 Pr = ray.orig;
+    Vec3 P0 = pos;
+    Vec3 n = normal;
+    Vec3 ur = ray.dir;
 
-	float denom = n.dot(ur);
-	if(denom < 0){
-		hit = true;
-		float num = n.dot(Pr - P0);
-		dist = -num/denom;
-	}
+    float denom = n.dot(ur);
+    if(denom < 0){
+        hit = true;
+        float num = n.dot(Pr - P0);
+        dist = -num/denom;
+    }
 
-	return hit;
+    return hit;
 }
 
 Vec3 Plane::NormalAt(const Vec3 & p) const{
-	USE(p); //just for compatibility
-	return normal;
+    USE(p); //just for compatibility
+    return normal;
 }
 
 Color Plane::ColorAt(const Vec3 &d) const{
-	if(tex){
-		//auto dist_from_center = (p - pos).mag();
-		auto tex_width = tex->GetWidth();
-		auto tex_height = tex->GetHeight();
+    if(tex){
+        //auto dist_from_center = (p - pos).mag();
+        auto tex_width = tex->GetWidth();
+        auto tex_height = tex->GetHeight();
 
         //auto u = std::abs(((int)floor(d.x) + tex_width/2) % (int)tex_width);
         //auto v = std::abs(((int)floor(d.z) + tex_height/2) % (int)tex_height);
@@ -37,34 +37,34 @@ Color Plane::ColorAt(const Vec3 &d) const{
         float u = to_point.dot(basis_u);
         float v = to_point.dot(basis_v);
 
-		return tex->AtReal(fabs(fmod(u,tex_width)),fabs(fmod(v,tex_height)));
-	} else {
-		return surface_color;
-	}
+        return tex->AtReal(fabs(fmod(u,tex_width)),fabs(fmod(v,tex_height)));
+    } else {
+        return surface_color;
+    }
 }
 
-Plane::Plane(const json &j){
-	pos.x = j["pos"]["x"];
-	pos.y = j["pos"]["y"];
-	pos.z = j["pos"]["z"];
-	normal.x = j["normal"]["x"];
-	normal.y = j["normal"]["y"];
-	normal.z = j["normal"]["z"];
+Plane::Plane(const json &j, std::shared_ptr<Texture::texturemap> _gtm){
+    global_texture_map = _gtm;
+    pos.x = j["pos"]["x"];
+    pos.y = j["pos"]["y"];
+    pos.z = j["pos"]["z"];
+    normal.x = j["normal"]["x"];
+    normal.y = j["normal"]["y"];
+    normal.z = j["normal"]["z"];
     normal.normalizeInPlace();
-	surface_color.r = j["surface_color"]["r"];
-	surface_color.g = j["surface_color"]["g"];
-	surface_color.b = j["surface_color"]["b"];
-	ks = j["blinn"]["ks"];
-	kd = j["blinn"]["kd"];
-	ka = j["blinn"]["ka"];
-	alpha = j["blinn"]["alpha"];
-	tex = nullptr;
-	if(j["texture"] != ""){
-		std::string texture_name = j["texture"];
-		tex = new Texture(texture_name.c_str());
-	}
-	ComputeBasis();
-	assert(UNITLENGTH(normal));
+    surface_color.r = j["surface_color"]["r"];
+    surface_color.g = j["surface_color"]["g"];
+    surface_color.b = j["surface_color"]["b"];
+    ks = j["blinn"]["ks"];
+    kd = j["blinn"]["kd"];
+    ka = j["blinn"]["ka"];
+    alpha = j["blinn"]["alpha"];
+    tex = nullptr;
+
+    LoadTexture(j,_gtm);
+
+    ComputeBasis();
+    assert(UNITLENGTH(normal));
 }
 
 

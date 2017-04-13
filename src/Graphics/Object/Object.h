@@ -18,22 +18,39 @@ enum ObjectType{
 
 using json = nlohmann::json;
 
+//Objects MUST be givena access to the gtm.
+//
+
 class Object {
 public:
-	Object(const json &data);
-	Object(){};
+	Object(const json &data,std::shared_ptr<Texture::texturemap>);
+        Object(){};
+        ~Object(){};
 	virtual bool IntersectDist(const Ray &, float &) const = 0;
 	virtual Vec3 NormalAt(const Vec3 &) const = 0;
 	virtual Color ColorAt(const Vec3 &) const = 0;
+
+        void LoadTexture(const json &j, std::shared_ptr<Texture::texturemap> _gtm){
+                global_texture_map = _gtm;
+                if(j["texture"] != ""){
+		        std::string texture_name = j["texture"];
+                        if(global_texture_map->find(texture_name) != global_texture_map->end()){
+                                tex = global_texture_map->at(texture_name);
+                        } else {
+		                tex = std::make_shared<Texture>(texture_name.c_str());
+                        }
+	        }
+        }
+
 	const static ObjectType type;
 	Color surface_color;
-        const std::string texture_key;
+        std::string texture_key;
 
 	float ks;
 	float kd;
 	float ka;
 	float alpha;
 
-private:
-        std::shared_ptr<std::map<std::string,const Texture &>> global_texture_map;
+        std::shared_ptr<Texture> tex;
+        std::shared_ptr<Texture::texturemap> global_texture_map;
 };

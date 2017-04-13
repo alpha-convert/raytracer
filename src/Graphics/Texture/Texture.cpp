@@ -14,21 +14,12 @@ int Texture::GetWidth() const{
     return real_width;
 }
 
-Texture::Texture(const char* _fname,std::string key, std::shared_ptr<std::map<std::string,const Texture &>> tex_map) : global_texture_map(tex_map){
-    assert(global_texture_map);
-
-    auto gtm_member = global_texture_map->find(key);
-
-    if(gtm_member == global_texture_map->end()){
-        fname = _fname;
-        printf("Creating new texture from file %s...\n TODO: Cache multi-use textures\n",_fname);
-        std::vector<unsigned char> buffer;
-        lodepng::load_file(buffer, fname); //load the image file with given filename
-        auto error = lodepng::decode(image_data, real_width, real_height, buffer); //decode the png
-        if(error) printf("Error making texture\n");
-    } else {
-        return gtm_member;
-    }
+Texture::Texture(const char* _fname){
+    fname = _fname;
+    printf("Creating new texture from file %s...\n TODO: Cache multi-use textures\n",_fname);
+    std::vector<unsigned char> buffer;
+    lodepng::load_file(buffer, fname); //load the image file with given filename
+    auto error = lodepng::decode(image_data, real_width, real_height, buffer); //decode the png
 }
 
 Texture::~Texture(){}

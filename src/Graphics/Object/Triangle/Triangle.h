@@ -25,10 +25,8 @@ public:
 	Vec3 NormalAt(const Vec3 &p) const;
 	Color ColorAt(const Vec3 &) const;
 
-	Triangle(const json &data);
+	Triangle(const json &data,std::shared_ptr<Texture::texturemap>);
 	Triangle();
-	Triangle(const Vec3 &a, const Vec3 &b, const Vec3 &c);
-	~Triangle(){if(tex != nullptr) delete tex;};
 
 	static const ObjectType type = ObjectType::type_triangle;
 

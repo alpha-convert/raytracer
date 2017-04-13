@@ -68,7 +68,7 @@ int main(int argc, char** argv){
     //Global lists and maps
 	std::vector<Object *> scene;
 	std::vector<Light> lights;
-    std::map<std::string,const Texture &> textures;
+    auto gtm = std::make_shared<Texture::texturemap>();
 
 	json json_scene;
 	read_entire_json_file("planescene.json",json_scene);
@@ -76,11 +76,11 @@ int main(int argc, char** argv){
 	for(const auto &o : json_scene["objects"]){
 		auto type = o["type"];
 		if(type == "type_sphere"){
-			scene.push_back(new Sphere(o));
+			scene.push_back(new Sphere(o,gtm));
 		} else if(type == "type_plane"){
-			scene.push_back(new Plane(o));
+			scene.push_back(new Plane(o,gtm));
 		} else if(type == "type_triangle"){
-			scene.push_back(new Triangle(o));
+			scene.push_back(new Triangle(o,gtm));
 		}
 	}
 
@@ -129,6 +129,5 @@ int main(int argc, char** argv){
 	for(auto &a:scene) delete a;
 	SDL_Quit();
 
-    assert(textures.get().empty());
-
+    assert(gtm->empty());
 }
