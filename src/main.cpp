@@ -71,7 +71,7 @@ int main(int argc, char** argv){
     auto gtm = std::make_shared<Texture::texturemap>();
 
 	json json_scene;
-	read_entire_json_file("planescene.json",json_scene);
+	read_entire_json_file("scene.json",json_scene);
 
 	for(const auto &o : json_scene["objects"]){
 		auto type = o["type"];
@@ -84,12 +84,14 @@ int main(int argc, char** argv){
 		}
 	}
 
-	for(const auto &l : json_scene["lights"]){
-		Light nl = Light(l);
+	for(const auto &ljson : json_scene["lights"]){
+		Light nl = Light(ljson);
 		lights.push_back(nl);
-		Sphere *s = new Sphere();
-		*s = nl.test_sphere;
-		scene.push_back(s);
+        //Each light has a corresponding sphere in world space
+        //Todo: Figure out why I put this here
+		//Sphere s = Sphere();
+		//s = nl.test_sphere;
+		//scene.push_back(&s);
 	}
 
 	//For each pixel
@@ -129,5 +131,7 @@ int main(int argc, char** argv){
 	for(auto &a:scene) delete a;
 	SDL_Quit();
 
+    printf("%lu\n",gtm->size());
+    printf("%p\n",gtm->begin());
     assert(gtm->empty());
 }

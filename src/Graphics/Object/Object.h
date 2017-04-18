@@ -38,13 +38,14 @@ public:
                                 tex = global_texture_map->at(texture_name);
                         } else {
 		                tex = std::make_shared<Texture>(texture_name.c_str());
+                                global_texture_map->insert(std::make_pair(texture_name,tex));
                         }
 	        }
         }
 
 	const static ObjectType type;
 	Color surface_color;
-        std::string texture_key;
+        const std::string texture_key;
 
 	float ks;
 	float kd;

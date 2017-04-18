@@ -1,5 +1,4 @@
 #include "Texture.h"
-
 Color Texture::At(float u, float v) const{
     assert(u <= 1 && u >= 0);
     assert(v <= 1 && v >= 0);
