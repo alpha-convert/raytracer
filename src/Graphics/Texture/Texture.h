@@ -6,14 +6,18 @@
 */
 #include <cstdio>
 #include <vector>
+#include <array>
 #include <limits>
 #include <cassert>
 #include <memory>
 #include <map>
+#include <unordered_map>
 #include "Color.h"
 #include "macros.h"
 #include "lodepng.h"
+#include "json/json.hpp"
 
+using json = nlohmann::json;
 
 //operates on ppm images
 //
@@ -22,19 +26,32 @@
 //OTHERWISE, LOAD IT UP.
 class Texture {
 public:
+
+        typedef std::string texturetype;
+        static const texturetype TypeImage;
+        static const texturetype TypePerlin;
+
         typedef std::map<std::string,std::shared_ptr<Texture>> texturemap;
 
 	Color At(float u, float v) const;
 	Color AtReal(int u, int v) const;
 	int GetHeight() const;
 	int GetWidth() const;
-	Texture(const char*); 
+        texturetype GetType();
+	Texture(const json &settings); 
 	~Texture();
 private:
 	unsigned int real_width;
 	unsigned int real_height;
-	std::vector<unsigned char> image_data;
-	const char *fname;
+	std::vector<unsigned char> tex_data;
+        std::string texname;
+        texturetype type;
+
+        void SetReal(int u, int v, Color);
+
+
+        void GeneratePerlinInPlace(int w, int h, int xOffset, int yOffset, 
+                        std::vector<unsigned char> &tex_data);
 
 };
 

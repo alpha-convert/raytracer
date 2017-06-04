@@ -74,7 +74,7 @@ int main(int argc, char** argv){
 	read_entire_json_file("scene.json",json_scene);
 
 	for(const auto &o : json_scene["objects"]){
-		auto type = o["type"];
+		auto type = o["geom_info"]["type"];
 		if(type == "type_sphere"){
 			scene.push_back(new Sphere(o,gtm));
 		} else if(type == "type_plane"){
@@ -132,6 +132,6 @@ int main(int argc, char** argv){
 	SDL_Quit();
 
     printf("%lu\n",gtm->size());
-    printf("%p\n",gtm->begin());
-    assert(gtm->empty());
+    //printf("%p\n",gtm->begin());
+    //assert(gtm->empty());
 }

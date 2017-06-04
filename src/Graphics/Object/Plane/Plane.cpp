@@ -45,23 +45,28 @@ Color Plane::ColorAt(const Vec3 &d) const{
 
 Plane::Plane(const json &j, std::shared_ptr<Texture::texturemap> _gtm){
     global_texture_map = _gtm;
-    pos.x = j["pos"]["x"];
-    pos.y = j["pos"]["y"];
-    pos.z = j["pos"]["z"];
-    normal.x = j["normal"]["x"];
-    normal.y = j["normal"]["y"];
-    normal.z = j["normal"]["z"];
+
+    auto geom_info = j["geom_info"];
+    auto texture_info = j["texture_info"];
+    auto color_info = j["color_info"];
+
+    pos.x = geom_info["pos"]["x"];
+    pos.y = geom_info["pos"]["y"];
+    pos.z = geom_info["pos"]["z"];
+    normal.x = geom_info["normal"]["x"];
+    normal.y = geom_info["normal"]["y"];
+    normal.z = geom_info["normal"]["z"];
     normal.normalizeInPlace();
-    surface_color.r = j["surface_color"]["r"];
-    surface_color.g = j["surface_color"]["g"];
-    surface_color.b = j["surface_color"]["b"];
-    ks = j["blinn"]["ks"];
-    kd = j["blinn"]["kd"];
-    ka = j["blinn"]["ka"];
-    alpha = j["blinn"]["alpha"];
+    surface_color.r = color_info["surface_color"]["r"];
+    surface_color.g = color_info["surface_color"]["g"];
+    surface_color.b = color_info["surface_color"]["b"];
+    ks = color_info["blinn"]["ks"];
+    kd = color_info["blinn"]["kd"];
+    ka = color_info["blinn"]["ka"];
+    alpha = color_info["blinn"]["alpha"];
     tex = nullptr;
 
-    LoadTexture(j,_gtm);
+    LoadTexture(texture_info,_gtm);
 
     ComputeBasis();
     assert(UNITLENGTH(normal));

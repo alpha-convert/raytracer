@@ -30,17 +30,16 @@ public:
 	virtual Vec3 NormalAt(const Vec3 &) const = 0;
 	virtual Color ColorAt(const Vec3 &) const = 0;
 
-        void LoadTexture(const json &j, std::shared_ptr<Texture::texturemap> _gtm){
+        void LoadTexture(const json &settings, std::shared_ptr<Texture::texturemap> _gtm){
                 global_texture_map = _gtm;
-                if(j["texture"] != ""){
-		        std::string texture_name = j["texture"];
-                        if(global_texture_map->find(texture_name) != global_texture_map->end()){
-                                tex = global_texture_map->at(texture_name);
-                        } else {
-		                tex = std::make_shared<Texture>(texture_name.c_str());
-                                global_texture_map->insert(std::make_pair(texture_name,tex));
-                        }
-	        }
+                std::string texture_name = settings["texname"];
+                if(global_texture_map->find(texture_name) != global_texture_map->end()){
+                        tex = global_texture_map->at(texture_name);
+                } else {
+                        tex = std::make_shared<Texture>(settings);
+                        global_texture_map->insert(std::make_pair(texture_name,tex));
+                }
+	        
         }
 
 	const static ObjectType type;
