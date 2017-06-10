@@ -10,6 +10,7 @@
 #include <limits>
 #include <cassert>
 #include <memory>
+#include <random>
 #include <map>
 #include <unordered_map>
 #include "Color.h"
@@ -29,7 +30,7 @@ public:
 
         typedef std::string texturetype;
         static const texturetype TypeImage;
-        static const texturetype TypePerlin;
+        static const texturetype TypeNoise;
 
         typedef std::map<std::string,std::shared_ptr<Texture>> texturemap;
 
@@ -49,9 +50,7 @@ private:
 
         void SetReal(int u, int v, Color);
 
-
-        void GeneratePerlinInPlace(int w, int h, int xOffset, int yOffset, 
-                        std::vector<unsigned char> &tex_data);
+        void GenerateNoiseInPlace();
 
 };
 

@@ -8,6 +8,7 @@ Sphere::Sphere(){
 }
 
 Sphere::Sphere(const json &j,std::shared_ptr<Texture::texturemap> _gtm){ 
+    printf("Warning: json parsing not fully implemented for spheres. View Plane.cpp for details.\n");
 	pos.x = j["pos"]["x"];
 	pos.y = j["pos"]["y"];
 	pos.z = j["pos"]["z"];

@@ -1,7 +1,7 @@
 #include "Texture.h"
 
 const Texture::texturetype Texture::TypeImage = "__image__";
-const Texture::texturetype Texture::TypePerlin = "__perlin__";
+const Texture::texturetype Texture::TypeNoise = "__noise__";
 
 Color Texture::At(float u, float v) const{
     assert(u <= 1 && u >= 0);
@@ -31,26 +31,21 @@ Texture::Texture(const json &settings){
         // width and height will be overloaded
         auto error = lodepng::decode(tex_data, real_width, real_height, buffer); //decode the png
         if(error) printf("Error making texture\n");
-    } else if(type == TypePerlin){
-        
-        printf("Greating new perlin map.\n");
-        tex_data.reserve(4*real_height*real_width);
-        printf("tex_data_ptr: %p",&tex_data);
-        for(int y = 0; y < real_height ; ++y){
-            for(int x = 0; x < real_width; ++x){
-                SetReal(x,y,Color(0,0,0,0));
-            }
-        }
-
+    } else if(type == TypeNoise){
+        printf("Greating new noise map.\n");
+        tex_data.resize(4*real_height*real_width);
+        GenerateNoiseInPlace();
     }
 }
 
 
 void Texture::SetReal(int u, int v, Color c){
-    tex_data[4 * v * real_width + 4 * u + 0] = c.r * 255;
-    tex_data[4 * v * real_width + 4 * u + 1] = c.g * 255;
-    tex_data[4 * v * real_width + 4 * u + 2] = c.b * 255;
-    tex_data[4 * v * real_width + 4 * u + 3] = c.a * 255;
+    auto base = 4 * v * real_width + 4 * u;
+
+    tex_data.at(base + 0) = c.r * 255;
+    tex_data.at(base + 1) = c.g * 255;
+    tex_data.at(base + 2) = c.b * 255;
+    tex_data.at(base + 3) = c.a * 255;
 
 }
 
@@ -67,3 +62,36 @@ Color Texture::AtReal(int u, int v) const{
     return Color(r,g,b,a);
 }
 
+void Texture::GenerateNoiseInPlace(){
+    //Generate random field
+
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937_64 generator (seed);
+    std::uniform_int_distribution<int> distribution(0, 1);
+
+    for(int x = 0; x < real_width; ++x){
+        for(int y = 0; y < real_height; ++y){
+            float bw = static_cast<float>(distribution(generator));
+            SetReal(x,y,Color(bw,bw,bw));
+        }
+    }
+
+
+    for(int x = 1; x < real_width - 1; ++x){
+        for(int y = 1; y < real_height - 1; ++y){
+            auto val = AtReal(x,y);
+            auto up = AtReal(x,y-1);
+            auto down = AtReal(x,y+1);
+            auto right = AtReal(x+1,y);
+            auto left = AtReal(x-1,y);
+            auto avg_val = ((val.r + up.r + down.r + left.r + right.r) / 5.0);
+            auto new_col = avg_val < 0.5 ? 0 : 1;
+
+            SetReal(x,y,Color(new_col,new_col,new_col));
+        }
+    }
+
+
+    //smooth the field
+
+}
