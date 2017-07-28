@@ -57,13 +57,13 @@ Plane::Plane(const json &j, std::shared_ptr<Texture::texturemap> _gtm){
     normal.y = geom_info["normal"]["y"];
     normal.z = geom_info["normal"]["z"];
     normal.normalizeInPlace();
-    surface_color.r = color_info["surface_color"]["r"];
     surface_color.g = color_info["surface_color"]["g"];
     surface_color.b = color_info["surface_color"]["b"];
     ks = color_info["blinn"]["ks"];
     kd = color_info["blinn"]["kd"];
     ka = color_info["blinn"]["ka"];
     alpha = color_info["blinn"]["alpha"];
+    surface_color.r = color_info["surface_color"]["r"];
     tex = nullptr;
 
     LoadTexture(texture_info,_gtm);

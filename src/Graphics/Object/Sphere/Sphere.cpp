@@ -8,20 +8,24 @@ Sphere::Sphere(){
 }
 
 Sphere::Sphere(const json &j,std::shared_ptr<Texture::texturemap> _gtm){ 
-    printf("Warning: json parsing not fully implemented for spheres. View Plane.cpp for details.\n");
-	pos.x = j["pos"]["x"];
-	pos.y = j["pos"]["y"];
-	pos.z = j["pos"]["z"];
-	r = j["r"];
-	surface_color.r = j["surface_color"]["r"];
-	surface_color.g = j["surface_color"]["g"];
-	surface_color.b = j["surface_color"]["b"];
-	ks = j["blinn"]["ks"];
-	kd = j["blinn"]["kd"];
-	ka = j["blinn"]["ka"];
-	alpha = j["blinn"]["alpha"];
+
+    auto geom_info = j["geom_info"];
+    auto color_info = j["color_info"];
+    auto texture_info = j["texture_info"];
+
+	pos.x = geom_info["pos"]["x"];
+	pos.y = geom_info["pos"]["y"];
+	pos.z = geom_info["pos"]["z"];
+	r = geom_info["r"];
+	surface_color.r = color_info["surface_color"]["r"];
+	surface_color.g = color_info["surface_color"]["g"];
+	surface_color.b = color_info["surface_color"]["b"];
+	ks = color_info["blinn"]["ks"];
+	kd = color_info["blinn"]["kd"];
+	ka = color_info["blinn"]["ka"];
+	alpha = color_info["blinn"]["alpha"];
 	tex = nullptr;
-    LoadTexture(j,_gtm);
+    LoadTexture(texture_info,_gtm);
 	
 }
 

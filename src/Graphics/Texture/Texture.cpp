@@ -25,7 +25,7 @@ Texture::Texture(const json &settings){
 
     if(type == TypeImage){
         std::string fname = settings["fname"];
-        printf("Creating new texture from file %s...\n",fname.c_str());
+        printf("Creating new texture \"%s\" from file %s...\n",texname.c_str(),fname.c_str());
         std::vector<unsigned char> buffer;
         lodepng::load_file(buffer, fname); //load the image file with given filename
         // width and height will be overloaded

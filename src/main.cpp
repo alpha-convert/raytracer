@@ -71,7 +71,8 @@ int main(int argc, char** argv){
     auto gtm = std::make_shared<Texture::texturemap>();
 
 	json json_scene;
-	read_entire_json_file("scene.json",json_scene);
+	read_entire_json_file("planescene.json",json_scene);
+
 
 	for(const auto &o : json_scene["objects"]){
 		auto type = o["geom_info"]["type"];

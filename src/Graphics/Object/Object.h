@@ -33,11 +33,13 @@ public:
         void LoadTexture(const json &settings, std::shared_ptr<Texture::texturemap> _gtm){
                 global_texture_map = _gtm;
                 std::string texture_name = settings["texname"];
-                if(global_texture_map->find(texture_name) != global_texture_map->end()){
-                        tex = global_texture_map->at(texture_name);
-                } else {
-                        tex = std::make_shared<Texture>(settings);
-                        global_texture_map->insert(std::make_pair(texture_name,tex));
+                if(texture_name != "NO_TEXTURE"){
+                  if(global_texture_map->find(texture_name) != global_texture_map->end()){
+                    tex = global_texture_map->at(texture_name);
+                  } else {
+                    tex = std::make_shared<Texture>(settings);
+                    global_texture_map->insert(std::make_pair(texture_name,tex));
+                  }
                 }
 	        
         }
