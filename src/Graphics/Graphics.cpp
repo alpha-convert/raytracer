@@ -214,16 +214,16 @@ Color Graphics::Trace(const std::vector<Object *> &scene, const std::vector<Ligh
         float ks = closest_to_light->ks;
         Color is = l.is;
         Color specular_term = is * ks * std::pow(std::max<float>(Rm.dot(V),0),alpha);
-        assert(0<=specular_term.r<=1);
-        assert(0<=specular_term.g<=1);
-        assert(0<=specular_term.b<=1);
+        assert(0<=specular_term.r && specular_term.r<=1);
+        assert(0<=specular_term.g && specular_term.g<=1);
+        assert(0<=specular_term.b && specular_term.b<=1);
 
         float kd = closest_to_light->kd;
         Color id = l.id;
         Color diffuse_term = id * kd * std::max<float>(Lm.dot(N),0);
-        assert(0<=diffuse_term.r<=1);
-        assert(0<=diffuse_term.g<=1);
-        assert(0<=diffuse_term.b<=1);
+        assert(0<=diffuse_term.r && diffuse_term.r <=1);
+        assert(0<=diffuse_term.g && diffuse_term.g <=1);
+        assert(0<=diffuse_term.b && diffuse_term.b <=1);
 
         Color reflection_term = Trace(scene,lights,light_check_ray,camera_pos,recurse_times+1) * closest_to_light->ks;
 

@@ -132,7 +132,5 @@ int main(int argc, char** argv){
   for(auto &a:scene) delete a;
   SDL_Quit();
 
-  printf("%lu\n",gtm->size());
-  //printf("%p\n",gtm->begin());
-  //assert(gtm->empty());
+  assert(gtm->empty());
 }

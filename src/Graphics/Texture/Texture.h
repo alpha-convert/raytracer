@@ -1,9 +1,9 @@
 #pragma once
 /***
-* @Author Joseph Cutler
-* @Date May 08, 2016
-* @Copyright WTFPL
-*/
+ * @Author Joseph Cutler
+ * @Date May 08, 2016
+ * @Copyright WTFPL
+ */
 #include <cstdio>
 #include <vector>
 #include <array>
@@ -26,31 +26,31 @@ using json = nlohmann::json;
 //IF WE ARE, SET IMAGE_DATA TO THAT THING.
 //OTHERWISE, LOAD IT UP.
 class Texture {
-public:
+  public:
 
-        typedef std::string texturetype;
-        static const texturetype TypeImage;
-        static const texturetype TypeNoise;
+    typedef std::string texturetype;
+    static const texturetype TypeImage;
+    static const texturetype TypeNoise;
 
-        typedef std::map<std::string,std::shared_ptr<Texture>> texturemap;
+    typedef std::map<std::string,std::shared_ptr<Texture>> texturemap;
 
-	Color At(float u, float v) const;
-	Color AtReal(int u, int v) const;
-	int GetHeight() const;
-	int GetWidth() const;
-        texturetype GetType();
-	Texture(const json &settings); 
-	~Texture();
-private:
-	unsigned int real_width;
-	unsigned int real_height;
-	std::vector<unsigned char> tex_data;
-        std::string texname;
-        texturetype type;
+    Color At(float u, float v) const;
+    Color AtReal(int u, int v) const;
+    int GetHeight() const;
+    int GetWidth() const;
+    texturetype GetType();
+    Texture(const json &settings); 
+    ~Texture();
+  private:
+    unsigned int real_width;
+    unsigned int real_height;
+    std::vector<unsigned char> tex_data;
+    std::string texname;
+    texturetype type;
 
-        void SetReal(int u, int v, Color);
+    void SetReal(int u, int v, Color);
 
-        void GenerateNoiseInPlace();
+    void GenerateNoiseInPlace();
 
 };
 
