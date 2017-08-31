@@ -151,7 +151,6 @@ Object *Graphics::GetClosestObject(const std::vector<Object *> &objects, const R
     }
   }
   return closest_object;
-
 }
 
 

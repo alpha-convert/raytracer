@@ -29,15 +29,12 @@ class Object {
     ~Object(){
       if(tex){
         auto use_count = tex.use_count();
-        printf("Deleting an object with tex name: %s, tex use count: %ld\n"
-            ,texture_name.c_str(), tex.use_count());
 
         //This is true if "this" is the only item left that has tex
         //Only "this" and the gtm own the tex pointer
         if(use_count == 2){
           //Remove tex from the gtm
           global_texture_map->erase(texture_name);
-          printf("Texture %s is no longer used and has been removed from the gtm.\n",texture_name.c_str());
         }
       }
 
